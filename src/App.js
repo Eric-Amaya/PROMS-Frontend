@@ -9,6 +9,7 @@ import ViewSchedule from './pages/ViewSchedule';
 import ViewParticipants from './pages/ViewParticipants';
 import Image from "./assets/avatar.png"
 import LogoImage from "./assets/Logo_Image.png"
+import ViewDocument from './pages/ViewDocument';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -46,7 +47,7 @@ function App() {
             <Route path="/view/resource" element={<ViewTask />} />
             <Route path="/view/participants" element={<ViewParticipants />} />
             <Route path="/view/performance" element={<ViewTask />} />
-            <Route path="/view/document" element={<ViewTask />} />
+            <Route path="/view/document" element={<ViewDocument />} />
             <Route path="/view/setting" element={<ViewTask />} />
           </Routes>
         </Box>

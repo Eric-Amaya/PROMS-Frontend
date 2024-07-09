@@ -2,23 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { IconButton, Typography } from '@mui/material';
 
-const ButtonMenu = ({ icon: Icon, label, to, ...props }) => {
-
+const ButtonMenuDrop = ({ icon: Icon, label, to, ...props }) => {
   return (
     <Link to={to} style={{ textDecoration: 'none', color: 'inherit' }}>
       <IconButton 
-        color="inherit"
+        color="default"
         sx={{
-          backgroundColor: 'inherit', 
-          borderRadius: '8px',
+          color: "#194970",
+          backgroundColor: 'primary', 
+          borderRadius: '2px',
           '&:hover': {
-            backgroundColor: '#194970',
-            borderRadius: '8px',
-            width: '100%'
+            color: '#FFF',
           },
           '&:active': {
-            backgroundColor: '#001f3e',
-            borderRadius: '8px',
             color: '#FFFFF'
           }
         }}
@@ -31,4 +27,4 @@ const ButtonMenu = ({ icon: Icon, label, to, ...props }) => {
   );
 };
 
-export default ButtonMenu;
+export default ButtonMenuDrop;

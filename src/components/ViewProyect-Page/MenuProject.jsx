@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Box, Typography, IconButton, Menu, MenuItem } from '@mui/material';
+import { AppBar, Toolbar, Box, Typography, IconButton, Menu } from '@mui/material';
 import CronogramasIcon from '@mui/icons-material/CalendarToday';
 import RecursosIcon from '@mui/icons-material/GroupWork';
 import ParticipantesIcon from '@mui/icons-material/People';
@@ -10,6 +10,8 @@ import TaskIcon from '@mui/icons-material/Assignment';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import ButtonMenu from './ButtonMenu';
+import ButtonMenuDrop from './ButtonMenuDrop';
+import MenuItemDrop from './MenuItemDrop';
 
 const MenuProject = ({ projectName }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,27 +37,27 @@ const MenuProject = ({ projectName }) => {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={handleMenuClose}>
-                <ButtonMenu icon={TaskIcon} label="Tareas" to="/view/task" />
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <ButtonMenu icon={CronogramasIcon} label="Cronogramas" to="/view/schedule" />
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <ButtonMenu icon={RecursosIcon} label="Recursos" to="/view/resource" />
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <ButtonMenu icon={ParticipantesIcon} label="Participantes" to="/view/participants"/>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <ButtonMenu icon={RendimientoIcon} label="Rendimiento" to="/view/performance"/>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <ButtonMenu icon={DocumentosIcon} label="Documentos" to="/view/document"/>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <ButtonMenu icon={SettingsIcon} label="Configuración" to="/view/setting" />
-              </MenuItem>
+              <MenuItemDrop onClick={handleMenuClose} >
+                <ButtonMenuDrop icon={TaskIcon} label="Tareas" to="/view/task" />
+              </MenuItemDrop>
+              <MenuItemDrop onClick={handleMenuClose}>
+                <ButtonMenuDrop icon={CronogramasIcon} label="Cronogramas" to="/view/schedule" />
+              </MenuItemDrop>
+              <MenuItemDrop onClick={handleMenuClose}>
+                <ButtonMenuDrop icon={RecursosIcon} label="Recursos" to="/view/resource" />
+              </MenuItemDrop>
+              <MenuItemDrop onClick={handleMenuClose}>
+                <ButtonMenuDrop icon={ParticipantesIcon} label="Participantes" to="/view/participants"/>
+              </MenuItemDrop>
+              <MenuItemDrop onClick={handleMenuClose}>
+                <ButtonMenuDrop icon={RendimientoIcon} label="Rendimiento" to="/view/performance"/>
+              </MenuItemDrop>
+              <MenuItemDrop onClick={handleMenuClose}>
+                <ButtonMenuDrop icon={DocumentosIcon} label="Documentos" to="/view/document"/>
+              </MenuItemDrop>
+              <MenuItemDrop onClick={handleMenuClose}>
+                <ButtonMenuDrop icon={SettingsIcon} label="Configuración" to="/view/setting" />
+              </MenuItemDrop>
           </Menu>
           <IconButton
               color="inherit"
@@ -73,8 +75,7 @@ const MenuProject = ({ projectName }) => {
             <ButtonMenu icon={ParticipantesIcon} label="Participantes" to="/view/participants" />
             <ButtonMenu icon={RendimientoIcon} label="Rendimiento" to="/view/performance" />
             <ButtonMenu icon={DocumentosIcon} label="Documentos" to="/view/document" />
-            <ButtonMenu icon={SettingsIcon} label="Configuración" to="/view/setting" />
-    
+            <ButtonMenu icon={SettingsIcon} label="Configuración" to="/view/setting" />    
           </Box>
         </Box>
       </Toolbar>

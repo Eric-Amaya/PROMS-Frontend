@@ -11,6 +11,7 @@ import Image from "./assets/avatar.png"
 import LogoImage from "./assets/Logo_Image.png"
 import ViewDocument from './pages/ViewDocument';
 import ViewResources from './pages/ViewResources';
+import ViewNotifications from './pages/ViewNotifications';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -21,6 +22,7 @@ function App() {
 
   const handleLogout = () => {
     // Lógica para cerrar sesión
+    window.location.href= 'https://management-system-frontend-woad.vercel.app/login'
     console.log('Cerrando sesión...');
   };
 
@@ -41,6 +43,7 @@ function App() {
           <CustomToolbar pageImg= {LogoImage} color = "#003057" userName = "Bastián Egaña" userImage={userImage}/>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path= "/notifications" element= {<ViewNotifications/>} />
             <Route path="/profile" element={<Home />} />
             <Route path="/view" element={<ViewTask />} />
             <Route path="/view/task" element={<ViewTask />} />

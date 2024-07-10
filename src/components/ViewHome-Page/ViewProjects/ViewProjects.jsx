@@ -16,10 +16,7 @@ const ViewProjects = ({ projects, onSelectProject }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Bienvenido a PROMS
-      </Typography>
-      
+
       <Typography variant="h5" gutterBottom>
         Vista general de tus proyectos
       </Typography>

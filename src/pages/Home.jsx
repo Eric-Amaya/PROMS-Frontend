@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import ViewProjects from '../components/ViewHome-Page/ViewProjects/ViewProjects';
 import ProjectsForm from '../components/ViewHome-Page/ProjectsForm/ProjectsForm';
-
+import CustomButton from '../components/ViewHome-Page/CustomButton';
 const Home = () => {
   const [openForm, setOpenForm] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -31,9 +31,14 @@ const Home = () => {
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
-        Crear proyecto
-      </Button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h4" gutterBottom marginTop={1} marginLeft={2}>
+          Bienvenido a PROMS
+        </Typography>
+        <CustomButton variant="contained" color="primary" onClick={() => handleOpenForm()}>
+          Crear proyecto
+        </CustomButton>
+      </div>
       <ViewProjects projects={projects} onSelectProject={handleOpenForm} />
       {openForm && (
         <ProjectsForm 

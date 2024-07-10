@@ -1,11 +1,15 @@
 import React from 'react';
 import MenuProject from '../components/ViewProyect-Page/MenuProject';
+import GanttChart from '../components/ViewSchedule-Page/GanttChart';
 
 const ViewSchedule = () => {
 
 
     return (
-        <MenuProject projectName={"Project Name"}/>
+        <div>
+            <MenuProject projectName={"Project Name"}/>
+            <GanttChart />
+        </div>
     );
 
 };

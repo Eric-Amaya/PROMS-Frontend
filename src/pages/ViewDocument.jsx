@@ -94,9 +94,9 @@ const ViewDocument = () => {
                     <Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Fecha</TableCell>
-                            <TableCell>Acciones</TableCell>
+                            <TableCell sx={{ width: '40%' }}>Nombre</TableCell>
+                            <TableCell sx={{ width: '30%' }}>Fecha</TableCell>
+                            <TableCell sx={{ width: '30%' }}>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -124,7 +124,7 @@ const ViewDocument = () => {
                     </Table>
                 </TableContainer>
                 <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-start' }}>
-                    <CustomButton variant="contained" icon = {<UploadIcon />}>Subir Documento</CustomButton>
+                    <CustomButton variant="contained" icon = {<UploadIcon />} >Subir Documento</CustomButton>
                 </Box>
             </Box>
         </div>

@@ -88,7 +88,6 @@ const ViewTask = () => {
   };
   
   
-  
   const handleCancelDelete = () => {
     setTaskToDelete(null);
     setOpenDeleteDialog(false);

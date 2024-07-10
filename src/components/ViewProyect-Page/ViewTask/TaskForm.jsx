@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Drawer, Box, TextField, Typography, Grid, Select, MenuItem, InputLabel, InputAdornment, IconButton } from '@mui/material';
+import { Drawer, Box, TextField, Typography, Grid, Select, MenuItem, Button, IconButton } from '@mui/material';
 import CustomButton from './customButton';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
+import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close'; 
 import { taskFormSchema } from '../../../validation/task-form-schema';
 import * as Yup from 'yup';
+import EditParticipantsDialog from './EditParticipantsDialog';
+import CommentsDialog from './CommentsDialog';
 
 const TaskForm = ({ task, onClose, onSave }) => {
   const [title, setTitle] = useState(task ? task.title : '');
@@ -19,6 +19,11 @@ const TaskForm = ({ task, onClose, onSave }) => {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [errors, setErrors] = useState({});
+  const [editParticipantsDialogOpen, setEditParticipantsDialogOpen] = useState(false);
+  const [commentsDialogOpen, setCommentsDialogOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState({ id: 6, name: 'Eric' });
+
+
   const validationSchema = taskFormSchema;
 
   const handleSave = async () => {
@@ -86,11 +91,13 @@ const TaskForm = ({ task, onClose, onSave }) => {
     setShowCommentForm(true);
   };
 
-  const handleSaveComment = () => {
-    if (newComment.trim() !== '') {
-      setComments([...comments, newComment]);
-      setNewComment('');
-      setShowCommentForm(false);
+  const handleSaveComment = (comment) => {
+    setComments([...comments, comment]);
+  };
+
+  const handleAssignToMe = () => {
+    if (currentUser && !participants.find(participant => participant.id === currentUser.id)) {
+      setParticipants([...participants, currentUser]);
     }
   };
 
@@ -159,12 +166,18 @@ const TaskForm = ({ task, onClose, onSave }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <InputLabel id="participants-label">Participantes</InputLabel>
+            <Box display='flex' flexDirection='row' alignItems='center' pb={2}>
+              <Typography variant='body1' mr={2}>Participantes</Typography>
+              <IconButton onClick={() => setEditParticipantsDialogOpen(true)}>
+                <EditIcon />
+              </IconButton>
+            </Box>
+            <Button onClick={handleAssignToMe} sx={{pb: 4}}>Asignarme a mi</Button>
             <Select
               fullWidth
               labelId="participants-label"
-              multiple
-              value={participants.map(participant => participant.id)}
+              placeholder='Seleccione un participante'
+              value=""
               onChange={handleParticipantChange}
             >
               {projectParticipants.map((participant) => (
@@ -173,12 +186,9 @@ const TaskForm = ({ task, onClose, onSave }) => {
                 </MenuItem>
               ))}
             </Select>
-          </Grid>
-          <Grid item xs={12}>
             {participants.map((participant) => (
-              <Box key={participant.id} display="flex" alignItems="center">
+              <Box key={participant.id} display="flex" alignItems="center" p={1} m={1}>
                 <Typography>{participant.name}</Typography>
-                <IconButton onClick={() => handleRemoveParticipant(participant.id)}><RemoveIcon /></IconButton>
               </Box>
             ))}
           </Grid>
@@ -198,46 +208,7 @@ const TaskForm = ({ task, onClose, onSave }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Grid container justifyContent="space-between" alignItems="center">
-              <Grid item>
-                <Typography variant="h7">Comentarios</Typography>
-              </Grid>
-              <Grid item>
-                <IconButton onClick={handleAddComment}>
-                  <AddIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-            <Box style={{ maxHeight: '200px', overflowY: 'scroll', padding: '16px' }}>
-              <ul style={{ listStyleType: 'none', padding: 0 }}>
-                {comments.map((comment, index) => (
-                  <li key={index} style={{ overflowWrap: 'break-word' }}>{comment}</li>
-                ))}
-              </ul>
-            </Box>
-            {showCommentForm && (
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  placeholder="Escribe un comentario..."
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  variant="outlined"
-                  style={{ marginRight: '8px' }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={handleSaveComment}>
-                          <SaveIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Box>
-            )}
+            <Typography variant="h6" onClick={() => setCommentsDialogOpen(true)}>Comentarios</Typography>
           </Grid>
           <Grid item xs={12}>
             <CustomButton fullWidth variant="contained" color="primary" onClick={handleSave}>
@@ -246,6 +217,19 @@ const TaskForm = ({ task, onClose, onSave }) => {
           </Grid>
         </Grid>
       </Box>
+      <EditParticipantsDialog
+        open={editParticipantsDialogOpen}
+        onClose={() => setEditParticipantsDialogOpen(false)}
+        projectParticipants={projectParticipants}
+        participants={participants}
+        setParticipants={setParticipants}
+      />
+      <CommentsDialog
+        open={commentsDialogOpen}
+        onClose={() => setCommentsDialogOpen(false)}
+        comments={comments}
+        onSaveComment={handleSaveComment}
+      />
     </Drawer>
   );
 };

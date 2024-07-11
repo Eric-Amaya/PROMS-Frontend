@@ -7,8 +7,8 @@ import CustomToolbar from './components/CustomToolbar';
 import ViewTask from './pages/ViewTask';
 import ViewSchedule from './pages/ViewSchedule';
 import ViewParticipants from './pages/ViewParticipants';
-import Image from "./assets/avatar.png"
-import LogoImage from "./assets/Logo_Image.png"
+import Image from "./assets/avatar.png";
+import LogoImage from "./assets/Logo_Image.png";
 import ViewDocument from './pages/ViewDocument';
 import ViewResources from './pages/ViewResources';
 import ViewNotifications from './pages/ViewNotifications';
@@ -22,7 +22,7 @@ function App() {
 
   const handleLogout = () => {
     // Lógica para cerrar sesión
-    window.location.href= 'https://management-system-frontend-woad.vercel.app/login'
+    window.location.href = 'https://management-system-frontend-woad.vercel.app/login';
     console.log('Cerrando sesión...');
   };
 
@@ -40,12 +40,12 @@ function App() {
           component="main"
           sx={{ flexGrow: 1, bgcolor: 'background.default'}}
         >
-          <CustomToolbar pageImg= {LogoImage} color = "#003057" userName = "Bastián Egaña" userImage={userImage}/>
+          <CustomToolbar pageImg={LogoImage} color="#003057" userName="Bastián Egaña" userImage={userImage}/>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path= "/notifications" element= {<ViewNotifications/>} />
+            <Route path="/notifications" element={<ViewNotifications />} />
             <Route path="/profile" element={<Home />} />
-            <Route path="/view" element={<ViewTask />} />
+            <Route path="/view/:id" element={<ViewTask />} /> 
             <Route path="/view/task" element={<ViewTask />} />
             <Route path="/view/schedule" element={<ViewSchedule />} />
             <Route path="/view/resource" element={<ViewResources />} />

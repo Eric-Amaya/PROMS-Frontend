@@ -1,73 +1,54 @@
-import React, { useState } from 'react';
-import {
-  Dialog, DialogActions, DialogContent,DialogContentText ,DialogTitle, Button, List, ListItem, ListItemText, ListItemSecondaryAction,
-  IconButton
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Paper } from '@mui/material';
 
 const EditParticipantsDialog = ({ open, onClose, projectParticipants, participants, setParticipants }) => {
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [participantToRemove, setParticipantToRemove] = useState(null);
 
-  const handleRemoveParticipant = (participantId) => {
-    setParticipants(participants.filter(participant => participant.id !== participantId));
-    setConfirmOpen(false);
-    setParticipantToRemove(null);
+  const handleToggleParticipant = (participant) => {
+    if (participants.find(p => p.id === participant.id)) {
+      setParticipants(participants.filter(p => p.id !== participant.id));
+    } else {
+      setParticipants([...participants, participant]);
+    }
   };
 
-  const handleRemoveAllParticipants = () => {
-    setParticipants([]);
-    setConfirmOpen(false);
-  };
-
-  const openConfirmDialog = (participantId) => {
-    setParticipantToRemove(participantId);
-    setConfirmOpen(true);
-  };
+  const isParticipantSelected = (id) => participants.some(p => p.id === id);
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Editar Participantes</DialogTitle>
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle>Participantes</DialogTitle>
       <DialogContent>
-        <List>
-          {participants.map((participant) => (
-            <ListItem key={participant.id}>
-              <ListItemText primary={participant.name} />
-              <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="delete" onClick={() => openConfirmDialog(participant.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-        <Button variant="contained" color="secondary" onClick={() => setConfirmOpen(true)}>
-          Eliminar Todos
-        </Button>
-        <Dialog
-          open={confirmOpen}
-          onClose={() => setConfirmOpen(false)}
-        >
-          <DialogTitle>Confirmar Eliminación</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {participantToRemove ? `¿Estás seguro de que quieres eliminar a ${projectParticipants.find(p => p.id === participantToRemove)?.name}?` : "¿Estás seguro de que quieres eliminar a todos los participantes?"}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setConfirmOpen(false)} color="primary">
-              Cancelar
-            </Button>
-            <Button onClick={participantToRemove ? () => handleRemoveParticipant(participantToRemove) : handleRemoveAllParticipants} color="secondary">
-              Eliminar
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Seleccionar</TableCell>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Apellido</TableCell>
+                <TableCell>Rol</TableCell>
+                <TableCell>Equipo</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {projectParticipants.map((participant) => (
+                <TableRow key={participant.id}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={isParticipantSelected(participant.id)}
+                      onChange={() => handleToggleParticipant(participant)}
+                    />
+                  </TableCell>
+                  <TableCell>{participant.name}</TableCell>
+                  <TableCell>{participant.lastName}</TableCell>
+                  <TableCell>{participant.rol}</TableCell>
+                  <TableCell>{participant.team}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Cerrar
-        </Button>
+        <Button onClick={onClose} color="primary">Cerrar</Button>
       </DialogActions>
     </Dialog>
   );

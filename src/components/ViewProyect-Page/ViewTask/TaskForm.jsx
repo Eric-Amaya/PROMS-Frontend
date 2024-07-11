@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Drawer, Box, TextField, Typography, Grid, Select, MenuItem, Button, IconButton } from '@mui/material';
+import { Drawer, Box, TextField, Typography, Grid, Button, IconButton } from '@mui/material';
 import CustomButton from './customButton';
-import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close'; 
 import { taskFormSchema } from '../../../validation/task-form-schema';
 import * as Yup from 'yup';
 import EditParticipantsDialog from './EditParticipantsDialog';
 import CommentsDialog from './CommentsDialog';
+import CommentIcon from '@mui/icons-material/Comment';
 
 const TaskForm = ({ task, onClose, onSave }) => {
   const [title, setTitle] = useState(task ? task.title : '');
@@ -21,7 +21,13 @@ const TaskForm = ({ task, onClose, onSave }) => {
   const [errors, setErrors] = useState({});
   const [editParticipantsDialogOpen, setEditParticipantsDialogOpen] = useState(false);
   const [commentsDialogOpen, setCommentsDialogOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ id: 6, name: 'Eric' });
+  const [currentUser, setCurrentUser] = useState({ 
+    id: 6, 
+    name: 'Eric', 
+    lastName: 'Amaya', 
+    rol: 'Developer', 
+    team: 'Frontend' 
+  });
 
 
   const validationSchema = taskFormSchema;
@@ -67,29 +73,49 @@ const TaskForm = ({ task, onClose, onSave }) => {
   };
 
   const [projectParticipants] = useState([
-    { id: 1, name: 'Juan' },
-    { id: 2, name: 'María' },
-    { id: 3, name: 'Carlos' },
-    { id: 4, name: 'Ana' },
-    { id: 5, name: 'Pedro' },
-  ]);
-
-  const handleParticipantChange = (e) => {
-    const selectedParticipantIndex = e.target.value; //Obtener el indice
-    const selectedParticipant = projectParticipants[selectedParticipantIndex-1];
-    console.log(selectedParticipantIndex)
-    if (selectedParticipant && !participants.find(participant => participant.id === selectedParticipant.id)) {
-      setParticipants([...participants, selectedParticipant]);
+    { 
+      id: 1, 
+      name: 'Juan', 
+      lastName: 'Pérez', 
+      rol: 'Developer', 
+      team: 'Backend' 
+    },
+    { 
+      id: 2, 
+      name: 'María', 
+      lastName: 'Gómez', 
+      rol: 'Designer', 
+      team: 'UI/UX' 
+    },
+    { 
+      id: 3, 
+      name: 'Carlos', 
+      lastName: 'López', 
+      rol: 'Product Manager', 
+      team: 'Product' 
+    },
+    { 
+      id: 4, 
+      name: 'Ana', 
+      lastName: 'Rodríguez', 
+      rol: 'QA Engineer', 
+      team: 'QA' 
+    },
+    { 
+      id: 5, 
+      name: 'Pedro', 
+      lastName: 'Martínez', 
+      rol: 'DevOps Engineer', 
+      team: 'Infrastructure' 
+    },
+    {
+      id: 6, 
+      name: 'Eric', 
+      lastName: 'Amaya', 
+      rol: 'Developer', 
+      team: 'Frontend' 
     }
-  };
-
-  const handleRemoveParticipant = (participantId) => {
-    setParticipants(participants.filter(participant => participant.id !== participantId));
-  };
-
-  const handleAddComment = () => {
-    setShowCommentForm(true);
-  };
+  ]);
 
   const handleSaveComment = (comment) => {
     setComments([...comments, comment]);
@@ -165,30 +191,20 @@ const TaskForm = ({ task, onClose, onSave }) => {
               }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} mb={2}>
             <Box display='flex' flexDirection='row' alignItems='center' pb={2}>
-              <Typography variant='body1' mr={2}>Participantes</Typography>
-              <IconButton onClick={() => setEditParticipantsDialogOpen(true)}>
-                <EditIcon />
-              </IconButton>
+              <Typography variant='body1' mr={2} pl={1}>Participantes</Typography>
+              <Button onClick={handleAssignToMe} >Asignarme a mi</Button>
             </Box>
-            <Button onClick={handleAssignToMe} sx={{pb: 4}}>Asignarme a mi</Button>
-            <Select
-              fullWidth
-              labelId="participants-label"
-              placeholder='Seleccione un participante'
-              value=""
-              onChange={handleParticipantChange}
-            >
-              {projectParticipants.map((participant) => (
-                <MenuItem key={participant.id} value={participant.id}>
-                  {participant.name}
-                </MenuItem>
-              ))}
-            </Select>
+            <Button onClick={() => setEditParticipantsDialogOpen(true)} sx={{mb: 2}}> Agregar participantes</Button>
             {participants.map((participant) => (
-              <Box key={participant.id} display="flex" alignItems="center" p={1} m={1}>
-                <Typography>{participant.name}</Typography>
+              <Box key={participant.id} display="flex" alignItems="center" p={1} m={1} sx= {{bgcolor: '#e7e4e4'}}>
+                <Typography variant='body2'>
+                  {participant.name + ' '} 
+                  {participant.lastName + ' '}
+                  {'- [ ' + participant.rol + ' ] ' }
+                  {'- [ ' + participant.team + ' ]' }
+                </Typography>
               </Box>
             ))}
           </Grid>
@@ -208,7 +224,12 @@ const TaskForm = ({ task, onClose, onSave }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="h6" onClick={() => setCommentsDialogOpen(true)}>Comentarios</Typography>
+            <Box display='flex' flexDirection='row' alignItems='center' pb={2}>
+              <Typography variant="subtitle1"mr={2} pl={1}>Comentarios</Typography>
+              <IconButton>
+                <CommentIcon onClick={() => setCommentsDialogOpen(true)} />
+              </IconButton>
+            </Box>
           </Grid>
           <Grid item xs={12}>
             <CustomButton fullWidth variant="contained" color="primary" onClick={handleSave}>

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart } from 'react-google-charts';
 import { Modal, Box, TextField, Typography } from '@mui/material';
 import CustomButton from './CustomButton';
+import { findTaskByProject } from '../../services/task.service';
 
 const GanttChart = () => {
   const [data, setData] = useState([
@@ -115,6 +116,41 @@ const GanttChart = () => {
       },
     },
   };
+
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     try {
+  //       // Asegúrate de que id_project esté definido y sea el correcto
+  //       const response = await findTaskByProject(id_project);
+  //       const formattedData = response.map(task => [
+  //         task.id.toString(),
+  //         task.name,
+  //         task.project.name, 
+  //         new Date(task.start_date),
+  //         new Date(task.end_date),
+  //         null, 
+  //         0, 
+  //         null, 
+  //       ]);
+  //       setData([
+  //         [
+  //           { type: 'string', label: 'ID de la Tarea' },
+  //           { type: 'string', label: 'Nombre de la Tarea' },
+  //           { type: 'string', label: 'Recurso' },
+  //           { type: 'date', label: 'Fecha de Inicio' },
+  //           { type: 'date', label: 'Fecha de Fin' },
+  //           { type: 'number', label: 'Duración' },
+  //           { type: 'number', label: 'Porcentaje Completo' },
+  //           { type: 'string', label: 'Dependencias' },
+  //         ],
+  //         ...formattedData
+  //       ]);
+  //     } catch (error) {
+  //       console.error('Error fetching tasks:', error);
+  //     }
+  //   };
+  //   loadData();
+  // }, []);
 
   return (
     <div>

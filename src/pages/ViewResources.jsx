@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MenuProject from '../components/ViewProyect-Page/MenuProject';
 import { Box, Paper, TableContainer, Typography, Grid, Table, TableHead, TableRow, TableCell, TextField, Dialog, DialogTitle, TableBody, IconButton, DialogContent, DialogActions, Button } from '@mui/material';
 import CustomButton from '../components/ViewProyect-Page/ViewResources/customButton';
@@ -10,6 +10,10 @@ import InfoIcon from '@mui/icons-material/Info';
 import ViewResource from '../components/ViewProyect-Page/ViewResources/ViewResource';
 import { resourceFormSchema } from '../validation/resource-form-schema';
 import * as Yup from 'yup';
+import { findResourcesByProject } from '../services/resource.service';
+import { createResource } from '../services/resource.service';
+import { updateResource } from '../services/resource.service';
+import { deleteResource } from '../services/resource.service';
 
 const ViewResources = () => {
     const [resources, setResources] = useState([]);
@@ -24,40 +28,53 @@ const ViewResources = () => {
     const [errors, setErrors] = useState({});
     const validationSchema = resourceFormSchema;
 
-    const handleAddResource = async () => {
+    const handleAddResource = async () => { 
         const resource = {
             name: resourceName,
             type: resourceType,
             content: resourceContent,
-        }; 
-        try{
-            await validationSchema.validate(resource, { abortEarly: false});
+        };
+        try {
+            await validationSchema.validate(resource, { abortEarly: false });
+            // Llama a createResource aquí y espera a que se complete
+            const createdResource = await createResource(resource);
             setResourceName('');
             setResourceType('');
             setResourceContent('');
-            setResources((prevResources) => [...prevResources, resource]);
+            setResources((prevResources) => [...prevResources, createdResource]);
         } catch (error) {
             if (error instanceof Yup.ValidationError) {
                 const validationErrors = {};
                 error.inner.forEach((err) => {
-                  validationErrors[err.path] = err.message;
+                    validationErrors[err.path] = err.message;
                 });
                 setErrors(validationErrors);
             } else {
                 console.error(error);
             }
         }
+    };
+
+    const handleEditResource = async (editedResource) => {
+        try {
+            const updatedResource = await updateResource(editedResource.id, editedResource);
+            setResources((prevResources) =>
+                prevResources.map((resource) => (resource.id === updatedResource.id ? updatedResource : resource))
+            );
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    const handleEditResource = (editedResource) => {
-        setResources ((prevResources) => 
-            prevResources.map((resource) => (resource.name === editedResource.name ? editedResource: resource))
-        );
-    }
-
-    const handleDeleteResource = (name) => {
-        setResources(resources.filter(res => res.name !== name));
-    }
+    const handleDeleteResource = async (id) => {
+        try {
+            await deleteResource(id);
+            // Actualiza el estado para remover el recurso eliminado
+            setResources(resources.filter(resource => resource.id !== id));
+        } catch (error) {
+            console.error('Error deleting resource:', error);
+        }
+    };
 
     const filteredResources = resources.filter((res) =>
         (searchTerm === '' || res.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -92,6 +109,19 @@ const ViewResources = () => {
           return newErrors;
         });
     };
+
+    // useEffect(() => {
+    //     const fetchResources = async () => {
+    //         try {
+    //             const resources = await findResourcesByProject(projectId);
+    //             setResources(resources);
+    //         } catch (error) {
+    //             console.error("Error fetching resources:", error);
+    //         }
+    //     };
+    
+    //     fetchResources();
+    // }, [projectId])
 
     return (
         <div>

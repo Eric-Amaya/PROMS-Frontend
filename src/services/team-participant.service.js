@@ -66,6 +66,77 @@ export const findTeamParticipants = async () => {
     }
 }
 
+export const findTeamsByParticipant = async (id) => {
+    try {
+        const response = await client.query({
+            query: gql`
+                query FindTeamsByParticipant($id: Float!) {
+                    FIND_TEAMS_BY_PARTICIPANT(id: $id) {
+                        id
+                        description
+                        name
+                        project {
+                            id
+                            name
+                        }
+                        teamParticipant {
+                            id
+                            participant {
+                                id
+                                name
+                                email
+                            }
+                            role
+                            tasks {
+                                id
+                                name
+                            }
+                        }
+                        type
+                    }
+                }
+            `,
+            variables: { id }
+        });
+        return response.data.FIND_TEAMS_BY_PARTICIPANT;
+    } catch (error) {
+        console.error('Error fetching teams by participant:', error);
+        throw error;
+    }
+}
+
+export const findTeamParticipantsByProject = async (projectId) => {
+    try {
+        const response = await client.query({
+            query: gql`
+                query FindTeamParticipantsByProject($projectId: Float!) {
+                    FIND_TEAMS_BY_PROJECT(id: $projectId) {
+                        id
+                        teamParticipant {
+                            id
+                            participant {
+                                id
+                                name
+                                email
+                            }
+                            role
+                            tasks {
+                                id
+                                name
+                            }
+                        }
+                    }
+                }
+            `,
+            variables: { projectId }
+        });
+        return response.data.FIND_TEAMS_BY_PROJECT.map(team => team.teamParticipant);
+    } catch (error) {
+        console.error('Error fetching team participants by project:', error);
+        throw error;
+    }
+}
+
 export const createTeamParticipant = async (teamParticipant) => {
     try {
         const { id_participant, id_task, id_team, role } = teamParticipant;

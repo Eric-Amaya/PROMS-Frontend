@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import EditParticipantsDialog from './EditParticipantsDialog';
 import CommentsDialog from './CommentsDialog';
 import CommentIcon from '@mui/icons-material/Comment';
+import { createTask } from '../../../services/task.service';
 
 const TaskForm = ({ task, onClose, onSave }) => {
   const [title, setTitle] = useState(task ? task.title : '');
@@ -33,19 +34,20 @@ const TaskForm = ({ task, onClose, onSave }) => {
   const validationSchema = taskFormSchema;
 
   const handleSave = async () => {
-    const newTask = {
-      id: task ? task.id : Date.now(),
-      title,
-      description,
-      startDate,
-      endDate,
-      participants,
-      resources,
-      comments,
+    const taskToCreate = {
+      name: title,
+      description: description,
+      start_date: startDate,
+      end_date: endDate,
+      projectId: task ? task.projectId : null, 
+      status: 'pending',
     };
+  
     try {
-      await validationSchema.validate(newTask, { abortEarly: false });
-      onSave(newTask);
+      await validationSchema.validate(taskToCreate, { abortEarly: false });
+      // Llamada a createTask en lugar de onSave
+      const createdTask = await createTask(taskToCreate);
+      console.log('Task created successfully', createdTask);
       setErrors({});
     } catch (error) {
       if (error instanceof Yup.ValidationError) {

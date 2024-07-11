@@ -1,48 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useState, useRef, useEffect } from 'react';
 import { TextField, List, ListItemText, ListItemButton, Box } from '@mui/material';
 import CustomButton from '../ViewTask/customButton';
+import { findAllParticipants } from '../../../services/participant.service';
 
 const SearchParticipants = ({ onAddParticipant, permitedRoles }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredParticipants, setFilteredParticipants] = useState([]);
-    const [isSearching, setIsSearching] = useState(false);
-    const [currentUserRole] = useState('Product Owner');
-    const [establishedRoles, setEstablishedRoles] = useState(permitedRoles);
-    const [selectedParticipant, setSelectedParticipant] = useState(null);
-    const [isSelectedInput, setIsSelectedInput] = useState(false);
-    const listContainerRef = useRef(null);
-
-    const isRoleChangeAllowed = establishedRoles.includes(currentUserRole);
-
-    const participants = [
-        { name: 'Juan Perez', email: 'juan@example.com', role: '' },
-        { name: 'Ana Gomez', email: 'ana@example.com', role: ''  },
-        { name: 'Luis Fernandez', email: 'luis@example.com', role: ''  },
-        { name: 'Bastian Egaña', email: 'bastian@example.com', role: ''  },
-        { name: 'John Doe', email: 'john@example.com' , role: '' },
-        { name: 'Jane Smith', email: 'jane@example.com', role: ''  },
-        { name: 'Alice Johnson', email: 'alice@example.com' , role: '' },
-        { name: 'Bob Brown', email: 'bob@example.com' , role: '' },
-        { name: 'Charlie White', email: 'charlie@example.com', role: ''  },
-        { name: 'David Black', email: 'david@example.com' , role: '' },
-        { name: 'Ella Green', email: 'ella@example.com' , role: '' },
-        { name: 'Frank Blue', email: 'frank@example.com' , role: '' },
-    ];
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (listContainerRef.current && !listContainerRef.current.contains(event.target)) {
-                setIsSearching(false);
-                setIsSelectedInput(false);
-                setSelectedParticipant(null);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    const [isSearching, setIsSearching] = useState(false); // Nuevo estado para controlar la visibilidad de la lista
+    const [participants, setParticipants] = useState([]);
 
     const handleSearch = (event) => {
         const { value } = event.target;
@@ -78,6 +43,19 @@ const SearchParticipants = ({ onAddParticipant, permitedRoles }) => {
         setIsSearching(true);
         setIsSelectedInput(true); // Mostrar la lista al hacer clic en el input
     };
+    useEffect(() => {
+        findAllParticipants().then((data) => {
+          const participants = data.map(participant => ({
+            name: participant.name,
+            lastName: participant.last_name,
+            email: participant.email
+          }));
+          // Asumiendo que tienes un estado para almacenar los participantes, por ejemplo, setParticipants
+          setParticipants(participants);
+        }).catch((error) => {
+          console.error('Error fetching participants:', error);
+        });
+      }, [searchTerm]); 
 
     return (
         <div>

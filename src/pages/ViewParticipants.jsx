@@ -8,7 +8,7 @@ import CreateTeam from '../components/ViewProyect-Page/ViewParticipants/CreateTe
 import ConfirmDialog from '../components/ViewProyect-Page/ViewParticipants/ConfirmDialog';
 import { Alert, Box, Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import CustomButton from '../components/ViewProyect-Page/ViewTask/customButton';
-import { findParticipantsByProject } from '../services/participant.service';
+import { findAllParticipants } from '../services/participant.service';
 import ViewChat from './ViewChat';
 
 const permitedRoles = [

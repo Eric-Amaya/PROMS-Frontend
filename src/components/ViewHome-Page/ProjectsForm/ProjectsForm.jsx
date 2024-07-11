@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Drawer, Box, TextField, Typography, Grid, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import * as Yup from 'yup';
+import { createProject } from '../../../services/project.service';
 import CustomButton from '../../ViewProyect-Page/ViewTask/customButton';
 import { projectFormSchema } from '../../../validation/createProject-schema';
 
@@ -17,7 +18,6 @@ const ProjectsForm = ({ project, onClose, onSave }) => {
 
   const handleSave = async () => {
     const newProject = {
-      id: project ? project.id : Date.now(),
       name,
       amount_participant,
       description,
@@ -25,8 +25,9 @@ const ProjectsForm = ({ project, onClose, onSave }) => {
       end_date: endDate,
     };
     try {
-      await validationSchema.validate(newProject, { abortEarly: false });
-      onSave(newProject);
+      await projectFormSchema.validate(newProject, { abortEarly: false });
+      const createdProject = await createProject(newProject); 
+      onSave(createdProject); 
       setErrors({});
     } catch (error) {
       if (error instanceof Yup.ValidationError) {

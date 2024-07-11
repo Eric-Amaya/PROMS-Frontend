@@ -4,12 +4,16 @@ import './styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CssBaseline } from '@mui/material';
+import { IntlProvider } from 'react-intl'; 
+import messages from './traduction/es.json';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <CssBaseline />
-    <App />
+    <IntlProvider locale= "es" messages={messages}>
+      <CssBaseline />
+      <App />
+    </IntlProvider>
   </React.StrictMode>
 );
 

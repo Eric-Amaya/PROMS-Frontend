@@ -1,0 +1,10 @@
+{
+    "task": {
+      "statuses": {
+        "pending": "Pendientes",
+        "inProgress": "En proceso",
+        "review": "En revisión",
+        "completed": "Completadas"
+      }
+    }
+  }

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
 import ViewProjects from '../components/ViewHome-Page/ViewProjects/ViewProjects';
 import ProjectsForm from '../components/ViewHome-Page/ProjectsForm/ProjectsForm';
 import CustomButton from '../components/ViewHome-Page/CustomButton';
+import { findProjectByIdParticipant } from '../services/project.service';
+
 const Home = () => {
   const [openForm, setOpenForm] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -28,6 +30,19 @@ const Home = () => {
     setProjects([...projects, newProject]);
     handleCloseForm();
   };
+
+  // useEffect(() => {
+  //   const loadProjects = async () => {
+  //     try {
+  //       const projects = await findProjectByIdParticipant(id);
+  //       setProjects(projects);
+  //     }catch (error) {
+  //       console.error('Error fetching projects:', error);
+  //     }
+  //   };
+
+  //   loadProjects();
+  // }, [projects]);
 
   return (
     <div>

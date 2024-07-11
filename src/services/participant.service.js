@@ -68,6 +68,47 @@ export const findParticipant = async (id) => {
     }
 };
 
+export const findParticipantsByProject = async (projectId) => {
+    try {
+        const response = await client.query({
+            query: gql`
+                query FindParticipantsByProject($id: Float!) {
+                    FIND_PARTICIPANTS_BY_PROJECT(id: $id) {
+                        id
+                        name
+                        last_name
+                        email
+                        rut
+                        participantConversation {
+                            id
+                            id_conversation {
+                                id
+                            }
+                        }
+                        teamParticipant {
+                            id
+                            role
+                            tasks {
+                                id
+                                name
+                            }
+                            team {
+                                id
+                                name
+                            }
+                        }
+                    }
+                }
+            `,
+            variables: { id: projectId }
+        });
+        return response.data.FIND_PARTICIPANTS_BY_PROJECT;
+    } catch (error) {
+        console.error('Error finding participants by project:', error);
+        throw error;
+    }
+};
+
 export const findAllParticipants = async () => {
     try {
         const response = await client.query({

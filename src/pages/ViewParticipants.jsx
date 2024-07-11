@@ -8,6 +8,7 @@ import CreateTeam from '../components/ViewProyect-Page/ViewParticipants/CreateTe
 import ConfirmDialog from '../components/ViewProyect-Page/ViewParticipants/ConfirmDialog';
 import { Box, Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import CustomButton from '../components/ViewProyect-Page/ViewTask/customButton';
+import { findParticipantsByProject } from '../services/participant.service';
 
 const ViewParticipants = () => {
     const [participants, setParticipants] = useState([]);
@@ -66,6 +67,15 @@ const ViewParticipants = () => {
         if (selectedTeam && !teams.some(team => team.id === selectedTeam.id)) {
             setSelectedTeam(null);
         }
+        const fetchParticipants = async () => {
+            try {
+                const participants = await findParticipantsByProject(projectId);
+                setParticipants(participants);
+            } catch (error) {
+                console.error('Error fetching participants:', error);
+            }
+        };
+        fetchParticipants();
     }, [teams, selectedTeam]);
 
     return (

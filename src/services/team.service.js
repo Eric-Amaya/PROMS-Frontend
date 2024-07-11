@@ -52,6 +52,32 @@ export const findTeams = async () => {
     }
 }
 
+export const findTeamsByProject = async (projectId) => {
+    try {
+        const response = await client.query({
+            query: gql`
+                query FindTeamsByProject($id: Float!) {
+                    FIND_TEAMS_BY_PROJECT(id: $id) {
+                        id
+                        name
+                        description
+                        type
+                        project {
+                            id
+                            name
+                        }
+                    }
+                }
+            `,
+            variables: { id: projectId }
+        });
+        return response.data.FIND_TEAMS_BY_PROJECT;
+    } catch (error) {
+        console.error('Error fetching teams by project:', error);
+        throw error;
+    }
+}
+
 export const createTeam = async (team) => {
     try {
         const { name, description, projectId, type } = team;

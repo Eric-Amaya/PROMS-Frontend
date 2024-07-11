@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert , Grid, Typography, Box, IconButton, Button, Dialog, DialogTitle, DialogActions} from '@mui/material';
 import TaskColumn from '../components/ViewProyect-Page/ViewTask/TaskColumn';
 import TaskForm from '../components/ViewProyect-Page/ViewTask/TaskForm';
@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CustomButton from '../components/ViewProyect-Page/ViewTask/customButton';
 import MenuProject from '../components/ViewProyect-Page/MenuProject';
 import traslations from '../traduction/es.json';
+import { findTaskByProject } from '../services/task.service';
 
 const initialTasks = {
   pending: [],
@@ -175,6 +176,19 @@ const ViewTask = () => {
     setSelectedTaskToInfo(null);
     setOpenDetailsDialog(false);
   };
+
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     try {
+  //       const tasksData = await findTaskByProject(projectId);
+  //       setTasks(tasksData);
+  //     } catch (error) {
+  //       console.error("Error fetching tasks by project:", error);
+  //     }
+  //   };
+  
+  //   loadData();
+  // }, [projectId]); 
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

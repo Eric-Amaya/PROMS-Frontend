@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, Paper, IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import CustomButton from '../components/ViewNotification-Page/customButton';
+import { findNotifications } from '../services/notification.service';
 
 const ViewNotifications = () => {
   const [notifications, setNotifications] = useState([
@@ -47,6 +48,32 @@ const ViewNotifications = () => {
     acc[notification.date].push(notification);
     return acc;
   }, {});
+
+  // useEffect(() => {
+  //   const loadNotifications = async () => {
+  //     try {
+  //       const response = await findNotifications();
+  //       const tasksByTeamParticipant = await findTaskByTeamParticipant();
+        
+  //       const participantIds = tasksByTeamParticipant.map(task => task.id_participant);
+        
+  //       const filteredNotifications = response.filter(notification =>
+  //         tasksByTeamParticipant.some(task => task.id === notification.taskId && participantIds.includes(task.id_participant))
+  //       );
+
+  //       filteredNotifications.map(notification => {
+  //         notification.time = `${notification.date} ${notification.time}`;
+  //         notification.content = tasksByTeamParticipant.find(task => task.id === notification.taskId).name;
+  //       });
+
+  //       setNotifications(filteredNotifications);
+  //     }
+  //     catch (error) {
+  //       console.error('Error fetching tasks:', error);
+  //     }
+  //   };
+  //   loadNotifications();
+  // }, [groupedNotifications]); //REVISAR SI FUNCIONA Y CREAR FUNCION findTaskByTeamParticipant EN BACKEND
 
   return (
     <Container maxWidth="lg" sx={{p: 4}}>

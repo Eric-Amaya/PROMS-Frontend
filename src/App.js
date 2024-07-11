@@ -12,6 +12,7 @@ import LogoImage from "./assets/Logo_Image.png";
 import ViewDocument from './pages/ViewDocument';
 import ViewResources from './pages/ViewResources';
 import ViewNotifications from './pages/ViewNotifications';
+import ViewSettings from './pages/ViewSettings';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -52,7 +53,7 @@ function App() {
             <Route path="/view/participants" element={<ViewParticipants />} />
             <Route path="/view/performance" element={<ViewTask />} />
             <Route path="/view/document" element={<ViewDocument />} />
-            <Route path="/view/setting" element={<ViewTask />} />
+            <Route path="/view/setting" element={<ViewSettings />} />
           </Routes>
         </Box>
       </Box>

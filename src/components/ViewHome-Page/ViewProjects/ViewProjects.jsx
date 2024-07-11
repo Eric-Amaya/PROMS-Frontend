@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Typography, Card, CardContent, Grid, Box, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom'; // Asegúrate de tener react-router-dom instalado
 
 const ViewProjects = ({ projects, onSelectProject }) => {
   const [open, setOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const navigate = useNavigate();
 
   const handleClickOpen = (course) => {
     setSelectedCourse(course);
@@ -14,9 +16,14 @@ const ViewProjects = ({ projects, onSelectProject }) => {
     setOpen(false);
   };
 
+  const handleViewMore = () => {
+    // Redirige a la ruta de la vista del proyecto seleccionado con el id
+    navigate(`/view/${selectedCourse.id}`);
+    handleClose();
+  };
+
   return (
     <Box sx={{ padding: 2 }}>
-
       <Typography variant="h5" gutterBottom>
         Vista general de tus proyectos
       </Typography>
@@ -24,19 +31,30 @@ const ViewProjects = ({ projects, onSelectProject }) => {
       <Grid container spacing={2}>
         {projects.map((course) => (
           <Grid item xs={12} sm={6} md={4} key={course.id}>
-            <Card onClick={() => handleClickOpen(course)} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card 
+              onClick={() => handleClickOpen(course)} 
+              sx={{ 
+                height: '100%', 
+                display: 'flex', 
+                flexDirection: 'column',
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: '#f5f5f5', // Fondo cuando se pasa el ratón
+                },
+                '&:active': {
+                  backgroundColor: '#e0e0e0', // Fondo cuando se mantiene presionado el botón del ratón
+                },
+              }}
+            >
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h6">
                   {course.name}
                 </Typography>
                 <Typography color="textSecondary">
-                  Product Owner: {course.product_owner}
+                  Fecha de inicio: {course.start_date}
                 </Typography>
                 <Typography color="textSecondary">
-                  Scrum Master: {course.scrum_master}
-                </Typography>
-                <Typography variant="body2">
-                  {course.team}
+                  Fecha de término: {course.end_date}
                 </Typography>
               </CardContent>
             </Card>
@@ -61,9 +79,9 @@ const ViewProjects = ({ projects, onSelectProject }) => {
           <Button onClick={handleClose} color="primary">
             Cerrar
           </Button>
-          {/* <Button onClick={() => { onSelectProject(selectedCourse); handleClose(); }} color="primary">
-            Editar
-          </Button> */}
+          <Button onClick={handleViewMore} color="primary">
+            Ver más
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

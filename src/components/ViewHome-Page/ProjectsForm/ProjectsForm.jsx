@@ -5,9 +5,7 @@ import * as Yup from 'yup';
 
 const projectFormSchema = Yup.object().shape({
   name: Yup.string().required('El nombre es requerido'),
-  team: Yup.string().required('El equipo es requerido'),
-  product_owner: Yup.string().required('El Product Owner es requerido'),
-  scrum_master: Yup.string().required('El Scrum Master es requerido'),
+  amount_participant: Yup.number().required('La cantidad de participantes es requerida'),
   description: Yup.string().required('La descripción es requerida'),
   start_date: Yup.date().required('La fecha de inicio es requerida'),
   end_date: Yup.date().required('La fecha de finalización es requerida'),
@@ -15,9 +13,7 @@ const projectFormSchema = Yup.object().shape({
 
 const ProjectsForm = ({ project, onClose, onSave }) => {
   const [name, setName] = useState(project ? project.name : '');
-  const [team, setTeam] = useState(project ? project.team : '');
-  const [productOwner, setProductOwner] = useState(project ? project.product_owner : '');
-  const [scrumMaster, setScrumMaster] = useState(project ? project.scrum_master : '');
+  const [amount_participant, setAmountParticipant] = useState(project ? project.amount_participant : '');
   const [description, setDescription] = useState(project ? project.description : '');
   const [startDate, setStartDate] = useState(project ? project.start_date : '');
   const [endDate, setEndDate] = useState(project ? project.end_date : '');
@@ -27,9 +23,7 @@ const ProjectsForm = ({ project, onClose, onSave }) => {
     const newProject = {
       id: project ? project.id : Date.now(),
       name,
-      team,
-      product_owner: productOwner,
-      scrum_master: scrumMaster,
+      amount_participant,
       description,
       start_date: startDate,
       end_date: endDate,
@@ -85,34 +79,13 @@ const ProjectsForm = ({ project, onClose, onSave }) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Equipo"
-              value={team}
-              onChange={(e) => setTeam(e.target.value)}
-              onFocus={() => clearError('team')}
-              error={!!errors.team}
-              helperText={errors.team}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Product Owner"
-              value={productOwner}
-              onChange={(e) => setProductOwner(e.target.value)}
-              onFocus={() => clearError('product_owner')}
-              error={!!errors.product_owner}
-              helperText={errors.product_owner}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Scrum Master"
-              value={scrumMaster}
-              onChange={(e) => setScrumMaster(e.target.value)}
-              onFocus={() => clearError('scrum_master')}
-              error={!!errors.scrum_master}
-              helperText={errors.scrum_master}
+              type="number"
+              label="Cantidad de participantes"
+              value={amount_participant}
+              onChange={(e) => setAmountParticipant(e.target.value)}
+              onFocus={() => clearError('amount_participant')}
+              error={!!errors.amount_participant}
+              helperText={errors.amount_participant}
             />
           </Grid>
           <Grid item xs={12}>

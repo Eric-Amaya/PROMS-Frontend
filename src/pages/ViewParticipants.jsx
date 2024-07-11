@@ -63,20 +63,20 @@ const ViewParticipants = () => {
         setSelectedTeam(team);
     };
 
-    useEffect(() => {
-        if (selectedTeam && !teams.some(team => team.id === selectedTeam.id)) {
-            setSelectedTeam(null);
-        }
-        const fetchParticipants = async () => {
-            try {
-                const participants = await findParticipantsByProject(projectId);
-                setParticipants(participants);
-            } catch (error) {
-                console.error('Error fetching participants:', error);
-            }
-        };
-        fetchParticipants();
-    }, [teams, selectedTeam]);
+    // useEffect(() => {
+    //     if (selectedTeam && !teams.some(team => team.id === selectedTeam.id)) {
+    //         setSelectedTeam(null);
+    //     }
+    //     const fetchParticipants = async () => {
+    //         try {
+    //             const participants = await findParticipantsByProject(projectId);
+    //             setParticipants(participants);
+    //         } catch (error) {
+    //             console.error('Error fetching participants:', error);
+    //         }
+    //     };
+    //     fetchParticipants();
+    // }, [teams, selectedTeam]);
 
     return (
         <div>

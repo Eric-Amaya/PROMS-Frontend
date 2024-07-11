@@ -25,7 +25,6 @@ const columnPermissions = {
   completed: ['Product Owner'],
 };
 
-
 const ViewTask = () => {
   const [tasks, setTasks] = useState(initialTasks);
   const [selectedTask, setSelectedTask] = useState(null);

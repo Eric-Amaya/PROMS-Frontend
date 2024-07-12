@@ -76,11 +76,11 @@ const ViewProjects = ({ projects, onSelectProject }) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cerrar
-          </Button>
           <Button onClick={handleViewMore} color="primary">
             Ver más
+          </Button>
+          <Button onClick={handleClose} color="error">
+            Cerrar
           </Button>
         </DialogActions>
       </Dialog>

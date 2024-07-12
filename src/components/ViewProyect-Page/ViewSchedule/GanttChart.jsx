@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Chart } from 'react-google-charts';
-import { Typography, Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import CustomButton from './CustomButton';

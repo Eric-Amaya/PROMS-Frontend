@@ -12,26 +12,15 @@ export const findProject = async (id) => {
                         amount_participants
                         start_date
                         end_date
-                        tasks {
-                            id
-                            name
-                            description
-                            status
-                        }
-                        teams {
-                            id
-                            name
-                            description
-                        }
                     }
                 }
             `,
             variables: { id }
         });
-        return response.data.FIND_PROJECT; // Retorna los datos del proyecto encontrado
+        return response.data.FIND_PROJECT;
     } catch (error) {
         console.error('Error fetching project:', error);
-        throw error; // Lanza el error para permitir su manejo fuera de esta función
+        throw error;
     }
 }
 
@@ -46,17 +35,6 @@ export const findProjects = async () => {
                         amount_participants
                         start_date
                         end_date
-                        tasks {
-                            id
-                            name
-                            description
-                            status
-                        }
-                        teams {
-                            id
-                            name
-                            description
-                        }
                     }
                 }
             `
@@ -67,41 +45,6 @@ export const findProjects = async () => {
         throw error;
     }
 }
-
-export const findProjectByIdParticipant = async (id) => {
-    try {
-        const response = await client.query({
-            query: gql`
-                query FindProjectsByParticipant($id: Float!) {
-                    FIND_PROJECTS_BY_PARTICIPANT(id: $id) {
-                        id
-                        name
-                        amount_participants
-                        start_date
-                        end_date
-                        tasks {
-                            id
-                            name
-                            description
-                            status
-                        }
-                        teams {
-                            id
-                            name
-                            description
-                        }
-                    }
-                }
-            `,
-            variables: { id }
-        });
-        return response.data.FIND_PROJECTS_BY_PARTICIPANT;
-    } catch (error) {
-        console.error('Error fetching projects by participant:', error);
-        throw error;
-    }
-}
-
 export const createProject = async (project) => {
     try {
         const { amount_participants, end_date, name, start_date } = project;
@@ -147,17 +90,6 @@ export const updateProject = async (id, projectUpdates) => {
                         amount_participants
                         start_date
                         end_date
-                        tasks {
-                            id
-                            name
-                            description
-                            status
-                        }
-                        teams {
-                            id
-                            name
-                            description
-                        }
                     }
                 }
             `,

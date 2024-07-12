@@ -3,18 +3,15 @@ import { Container, Typography } from '@mui/material';
 import ViewProjects from '../components/ViewHome-Page/ViewProjects/ViewProjects';
 import ProjectsForm from '../components/ViewHome-Page/ProjectsForm/ProjectsForm';
 import CustomButton from '../components/ViewHome-Page/CustomButton';
-import { findProjectByIdParticipant } from '../services/project.service';
+import { findProjectsByParticipant } from '../services/team-participant.service';
+import { findParticipantByRut } from '../services/participant.service';
+import { createParticipant } from '../services/participant.service';
 
 const Home = () => {
   const [openForm, setOpenForm] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [projects, setProjects] = useState([
-    { id: 1, name: 'Proyecto 1', description: 'Proyecto de desarrollo de software', amount_participant: 5, start_date: '01-04-2024', end_date: '25-05-2024' },
-    { id: 2, name: 'Proyecto 2', description: 'Proyecto de desarrollo de software', amount_participant: 5, start_date: '02-04-2024', end_date: '26-05-2024' },
-    { id: 3, name: 'Proyecto 3', description: 'Proyecto de desarrollo de software', amount_participant: 5, start_date: '03-04-2024', end_date: '27-05-2024' },
-    { id: 4, name: 'Proyecto 4', description: 'Proyecto de desarrollo de software', amount_participant: 5, start_date: '04-04-2024', end_date: '28-05-2024' },
-    { id: 5, name: 'Proyecto 5', description: 'Proyecto de desarrollo de software', amount_participant: 5, start_date: '05-04-2024', end_date: '29-05-2024' },
-  ]);
+  const [participant, setParticipant] = useState({});
+  const [projects, setProjects] = useState([]);
 
   const handleOpenForm = (project = null) => {
     setSelectedProject(project);
@@ -31,18 +28,21 @@ const Home = () => {
     handleCloseForm();
   };
 
-  // useEffect(() => {
-  //   const loadProjects = async () => {
-  //     try {
-  //       const projects = await findProjectByIdParticipant(id);
-  //       setProjects(projects);
-  //     }catch (error) {
-  //       console.error('Error fetching projects:', error);
-  //     }
-  //   };
+  useEffect(() => {
+      const loadProjects = async () => {
+        try {
+          const participant = await findParticipantByRut("21345678-9");
+          console.log('participant:', participant);
+          const projects = await findProjectsByParticipant(participant.id);
+          setProjects(projects);
+        } catch (error) {
+          console.error('Error fetching projects:', error);
+        }
+      };
 
-  //   loadProjects();
-  // }, [projects]);
+      loadProjects();
+    }
+    , [participant.id])
 
   return (
     <Container xl maxWidth='xl' sx={{pt: 2}}>

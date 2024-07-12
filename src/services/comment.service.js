@@ -10,6 +10,7 @@ export const createComment = async (createCommentDto) => {
                         id
                         content
                         date
+                        participantId
                         projectId
                         taskId
                     }
@@ -28,11 +29,12 @@ export const updateComment = async (id, updateCommentDto) => {
     try {
         const response = await client.mutate({
             mutation: gql`
-                mutation UpdateComment($id: ID!, $updateCommentDto: UpdateCommentDto!) {
+                mutation UpdateComment($id: Float!, $updateCommentDto: UpdateCommentDto!) {
                     UPDATE_COMMENT(id: $id, updateCommentDto: $updateCommentDto) {
                         id
                         content
                         date
+                        participantId
                         projectId
                         taskId
                     }
@@ -51,7 +53,7 @@ export const deleteComment = async (id) => {
     try {
         const response = await client.mutate({
             mutation: gql`
-                mutation DeleteComment($id: ID!) {
+                mutation DeleteComment($id: Float!) {
                     DELETE_COMMENT(id: $id) {
                         id
                     }
@@ -70,11 +72,12 @@ export const findComment = async (id) => {
     try {
         const response = await client.query({
             query: gql`
-                query FindComment($id: ID!) {
+                query FindComment($id: Float!) {
                     FIND_COMMENT(id: $id) {
                         id
                         content
                         date
+                        participantId
                         projectId
                         taskId
                     }
@@ -98,6 +101,7 @@ export const findComments = async () => {
                         id
                         content
                         date
+                        participantId
                         projectId
                         taskId
                     }

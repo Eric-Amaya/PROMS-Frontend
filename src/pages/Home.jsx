@@ -4,7 +4,7 @@ import ViewProjects from '../components/ViewHome-Page/ViewProjects/ViewProjects'
 import ProjectsForm from '../components/ViewHome-Page/ProjectsForm/ProjectsForm';
 import CustomButton from '../components/ViewHome-Page/CustomButton';
 import { findProjectByIdParticipant } from '../services/project.service';
-
+//test
 const Home = () => {
   const [openForm, setOpenForm] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);

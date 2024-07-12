@@ -12,15 +12,12 @@ export const createParticipant = async (createParticipantDto) => {
                         last_name
                         email
                         rut
-                        password
-                        participantConversationId
-                        teamParticipantId
                     }
                 }
             `,
             variables: { createParticipantDto }
         });
-        return response.data.createParticipant;
+        return response.data.CREATE_PARTICIPANT;
     } catch (error) {
         console.error('Error creating participant:', error);
         throw error;
@@ -38,76 +35,40 @@ export const findParticipant = async (id) => {
                         last_name
                         email
                         rut
-                        participantConversation {
-                            id
-                            id_conversation {
-                                id
-                            }
-                        }
-                        teamParticipant {
-                            id
-                            role
-                            tasks {
-                                id
-                                name
-                            }
-                            team {
-                                id
-                                name
-                            }
-                        }
                     }
                 }
             `,
             variables: { id }
         });
-        return response.data.findParticipant;
+        return response.data.FIND_PARTICIPANT;
     } catch (error) {
         console.error('Error finding participant:', error);
         throw error;
     }
 };
 
-export const findParticipantsByProject = async (projectId) => {
+export const findParticipantByRut = async (rut) => {
     try {
         const response = await client.query({
             query: gql`
-                query FindParticipantsByProject($id: Float!) {
-                    FIND_PARTICIPANTS_BY_PROJECT(id: $id) {
+                query FindParticipantByRut($rut: String!) {
+                    FIND_PARTICIPANT_BY_RUT(rut: $rut) {
                         id
                         name
                         last_name
                         email
                         rut
-                        participantConversation {
-                            id
-                            id_conversation {
-                                id
-                            }
-                        }
-                        teamParticipant {
-                            id
-                            role
-                            tasks {
-                                id
-                                name
-                            }
-                            team {
-                                id
-                                name
-                            }
-                        }
                     }
                 }
             `,
-            variables: { id: projectId }
+            variables: { rut }
         });
-        return response.data.FIND_PARTICIPANTS_BY_PROJECT;
+        return response.data.FIND_PARTICIPANT_BY_RUT;
     } catch (error) {
-        console.error('Error finding participants by project:', error);
+        console.error('Error fetching participant by RUT:', error);
         throw error;
     }
-};
+}
 
 export const findAllParticipants = async () => {
     try {
@@ -120,24 +81,6 @@ export const findAllParticipants = async () => {
                         last_name
                         email
                         rut
-                        participantConversation {
-                            id
-                            id_conversation {
-                                id
-                            }
-                        }
-                        teamParticipant {
-                            id
-                            role
-                            tasks {
-                                id
-                                name
-                            }
-                            team {
-                                id
-                                name
-                            }
-                        }
                     }
                 }
             `
@@ -160,14 +103,12 @@ export const updateParticipant = async (id, updateParticipantDto) => {
                         last_name
                         email
                         rut
-                        participantConversationId
-                        teamParticipantId
                     }
                 }
             `,
             variables: { id, updateParticipantDto }
         });
-        return response.data.updateParticipant;
+        return response.data.UPDATE_PARTICIPANT;
     } catch (error) {
         console.error('Error updating participant:', error);
         throw error;
@@ -186,7 +127,7 @@ export const deleteParticipant = async (id) => {
             `,
             variables: { id }
         });
-        return response.data.deleteParticipant;
+        return response.data.DELETE_PARTICIPANT;
     } catch (error) {
         console.error('Error deleting participant:', error);
         throw error;

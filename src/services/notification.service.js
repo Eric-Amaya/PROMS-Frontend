@@ -1,6 +1,7 @@
 import client from '../apolloclient';
 import { gql } from '@apollo/client';
 
+// Create a new notification
 export const createNotification = async (createNotificationDto) => {
     try {
         const response = await client.mutate({
@@ -21,13 +22,14 @@ export const createNotification = async (createNotificationDto) => {
         console.error('Error creating notification:', error);
         throw error;
     }
-}
+};
 
+// Update an existing notification
 export const updateNotification = async (id, updateNotificationDto) => {
     try {
         const response = await client.mutate({
             mutation: gql`
-                mutation UpdateNotification($id: ID!, $updateNotificationDto: UpdateNotificationDto!) {
+                mutation UpdateNotification($id: Float!, $updateNotificationDto: UpdateNotificationDto!) {
                     UPDATE_NOTIFICATION(id: $id, updateNotificationDto: $updateNotificationDto) {
                         id
                         content
@@ -42,13 +44,14 @@ export const updateNotification = async (id, updateNotificationDto) => {
         console.error('Error updating notification:', error);
         throw error;
     }
-}
+};
 
+// Delete a notification
 export const deleteNotification = async (id) => {
     try {
         const response = await client.mutate({
             mutation: gql`
-                mutation DeleteNotification($id: ID!) {
+                mutation DeleteNotification($id: Float!) {
                     DELETE_NOTIFICATION(id: $id) {
                         id
                     }
@@ -61,13 +64,14 @@ export const deleteNotification = async (id) => {
         console.error('Error deleting notification:', error);
         throw error;
     }
-}
+};
 
+// Find a specific notification by ID
 export const findNotification = async (id) => {
     try {
         const response = await client.query({
             query: gql`
-                query FindNotification($id: ID!) {
+                query FindNotification($id: Float!) {
                     FIND_NOTIFICATION(id: $id) {
                         id
                         content
@@ -83,8 +87,9 @@ export const findNotification = async (id) => {
         console.error('Error fetching notification:', error);
         throw error;
     }
-}
+};
 
+// Find all notifications
 export const findNotifications = async () => {
     try {
         const response = await client.query({
@@ -104,4 +109,4 @@ export const findNotifications = async () => {
         console.error('Error fetching notifications:', error);
         throw error;
     }
-}
+};

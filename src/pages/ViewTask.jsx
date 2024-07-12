@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Alert , Grid, Typography, Box, IconButton, Button, Dialog, DialogTitle, DialogActions} from '@mui/material';
+import React, { useState } from 'react';
+import { Alert, Grid, Typography, Box, IconButton, Button, Dialog, DialogTitle, DialogActions, TextField } from '@mui/material';
 import TaskColumn from '../components/ViewProyect-Page/ViewTask/TaskColumn';
 import TaskForm from '../components/ViewProyect-Page/ViewTask/TaskForm';
 import TaskDetailsDialog from '../components/ViewProyect-Page/ViewTask/TaskDetailsDialog';
@@ -9,7 +9,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import CustomButton from '../components/ViewProyect-Page/ViewTask/customButton';
 import MenuProject from '../components/ViewProyect-Page/MenuProject';
 import traslations from '../traduction/es.json';
-import { findTaskByProject } from '../services/task.service';
 import ViewChat from './ViewChat';
 
 const initialTasks = {
@@ -33,12 +32,28 @@ const ViewTask = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [taskMovements, setTaskMovements] = useState([]); // Movimientos de las tareas
+  const [taskMovements, setTaskMovements] = useState([]);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const [currentUserRole, setCurrentUserRole] = useState('Scrum Master'); 
+  const [currentUserRole, setCurrentUserRole] = useState('Scrum Master');
   const [alertErrorMovementTask, setAlertErrorMovementTask] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [projectName, setProjectName] = useState('Nombre del Proyecto');
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleProjectNameChange = (event) => {
+    setProjectName(event.target.value);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      setIsEditing(false);
+    }
+  };
 
   const addTask = (task) => {
     if (!task.id) {
@@ -77,7 +92,6 @@ const ViewTask = () => {
     }
   };
 
-  // Función para encontrar la columna de una tarea basada en su ID
   const findTaskColumn = (taskId) => {
     for (const columnId in tasks) {
       const taskIndex = tasks[columnId].findIndex((task) => task.id === taskId);
@@ -95,9 +109,7 @@ const ViewTask = () => {
     const sourceColumn = source.droppableId;
     const destinationColumn = destination.droppableId;
 
-    // Verificar si la columna de origen es la misma que la columna de destino
     if (sourceColumn === destinationColumn) {
-      // Mover la tarea dentro de la misma columna
       const columnTasks = Array.from(tasks[sourceColumn]);
       const [movedTask] = columnTasks.splice(source.index, 1);
       columnTasks.splice(destination.index, 0, movedTask);
@@ -107,7 +119,6 @@ const ViewTask = () => {
         [sourceColumn]: columnTasks,
       }));
     } else {
-      // Mover la tarea entre columnas diferentes
       const sourceTasks = Array.from(tasks[sourceColumn]);
       const destinationTasks = Array.from(tasks[destinationColumn]);
       const [movedTask] = sourceTasks.splice(source.index, 1);
@@ -130,7 +141,6 @@ const ViewTask = () => {
         to: destinationColumn,
       };
 
-      // Registrar el movimiento de la tarea
       setTaskMovements((prevMovements) => [
         ...prevMovements,
         movement
@@ -144,7 +154,6 @@ const ViewTask = () => {
     }
   };
 
-  
   const openForm = (task = null) => {
     setSelectedTask(task);
     setIsFormOpen(true);
@@ -177,22 +186,9 @@ const ViewTask = () => {
     setOpenDetailsDialog(false);
   };
 
-  // useEffect(() => {
-  //   const loadData = async () => {
-  //     try {
-  //       const tasksData = await findTaskByProject(projectId);
-  //       setTasks(tasksData);
-  //     } catch (error) {
-  //       console.error("Error fetching tasks by project:", error);
-  //     }
-  //   };
-  
-  //   loadData();
-  // }, [projectId]); 
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <MenuProject projectName={"Nombre del Proyecto"} />
+      <MenuProject projectName={projectName} />
       {alertErrorMovementTask && (
         <div style={{ position: 'absolute', zIndex: 9999, top: 22, left: '50%', transform: 'translate(-50%, -42%)', width: '100%' }}>
           <Alert severity="error" onClose={() => setAlertErrorMovementTask(false)}>
@@ -205,8 +201,21 @@ const ViewTask = () => {
         <Grid container spacing={2} alignItems="center" justifyContent="space-between">
           <Grid item>
             <Box display="flex" alignItems="center">
-              <Typography variant="h5" style={{ fontFamily: 'Open Sans' }}>Nombre del Proyecto</Typography>
-              <IconButton style={{ marginLeft: '8px' }}>
+              {isEditing ? (
+                <TextField
+                  value={projectName}
+                  onChange={handleProjectNameChange}
+                  onKeyPress={handleKeyPress}
+                  autoFocus
+                  size='small'
+                  onBlur={() => setIsEditing(false)}
+                />
+              ) : (
+                <Typography variant="h6" style={{ fontFamily: 'Open Sans' }}>
+                  {projectName}
+                </Typography>
+              )}
+              <IconButton style={{ marginLeft: '8px' }} onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
             </Box>
@@ -222,7 +231,7 @@ const ViewTask = () => {
               tasks={tasks.pending}
               onEdit={openForm}
               onDelete={handleDeleteTask}
-              onDetails={openInfoDialog} // Agregado para abrir detalles
+              onDetails={openInfoDialog}
               onUpdateTasks={(newTasks) => setTasks((prevTasks) => ({ ...prevTasks, pending: newTasks }))}
             />
             <TaskColumn
@@ -231,7 +240,7 @@ const ViewTask = () => {
               tasks={tasks.inProgress}
               onEdit={openForm}
               onDelete={handleDeleteTask}
-              onDetails={openInfoDialog} // Agregado para abrir detalles
+              onDetails={openInfoDialog}
               onUpdateTasks={(newTasks) => setTasks((prevTasks) => ({ ...prevTasks, inProgress: newTasks }))}
             />
             <TaskColumn
@@ -240,7 +249,7 @@ const ViewTask = () => {
               tasks={tasks.review}
               onEdit={openForm}
               onDelete={handleDeleteTask}
-              onDetails={openInfoDialog} // Agregado para abrir detalles
+              onDetails={openInfoDialog}
               onUpdateTasks={(newTasks) => setTasks((prevTasks) => ({ ...prevTasks, review: newTasks }))}
             />
             <TaskColumn
@@ -249,14 +258,14 @@ const ViewTask = () => {
               tasks={tasks.completed}
               onEdit={openForm}
               onDelete={handleDeleteTask}
-              onDetails={openInfoDialog} // Agregado para abrir detalles
+              onDetails={openInfoDialog}
               onUpdateTasks={(newTasks) => setTasks((prevTasks) => ({ ...prevTasks, completed: newTasks }))}
             />
           </Grid>
         </Box>
 
         <Box mt={4}>
-          <CustomButton variant="contained" onClick={() => openForm()} icon={<AddIcon />} >Agregar</CustomButton>
+          <CustomButton variant="contained" onClick={() => openForm()} icon={<AddIcon />}>Agregar</CustomButton>
         </Box>
 
         {isFormOpen && (
@@ -270,12 +279,11 @@ const ViewTask = () => {
         <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
           <DialogTitle variant='body1'>¿Estás seguro de que deseas eliminar {taskToDelete ? taskToDelete.title : ''}?</DialogTitle>
           <DialogActions>
-            <Button onClick={handleConfirmDelete} >Confirmar</Button>
-            <Button onClick={handleCancelDelete} color="error" >Cancelar</Button>
+            <Button onClick={handleConfirmDelete}>Confirmar</Button>
+            <Button onClick={handleCancelDelete} color="error">Cancelar</Button>
           </DialogActions>
         </Dialog>
 
-        {/* Diálogo de detalles de la tarea */}
         <TaskDetailsDialog
           open={openInfoDialog}
           onClose={closeDetailsDialog}
@@ -283,7 +291,7 @@ const ViewTask = () => {
           taskMovements={taskMovements.filter(movement => movement.taskId === (selectedTaskToInfo ? selectedTaskToInfo.id : null))}
         />
       </div>
-      <ViewChat/>
+      <ViewChat />
     </DragDropContext>
   );
 };

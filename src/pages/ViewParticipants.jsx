@@ -6,9 +6,14 @@ import TeamList from '../components/ViewProyect-Page/ViewParticipants/TeamList';
 import TeamDetail from '../components/ViewProyect-Page/ViewParticipants/TeamDetail';
 import CreateTeam from '../components/ViewProyect-Page/ViewParticipants/CreateTeam';
 import ConfirmDialog from '../components/ViewProyect-Page/ViewParticipants/ConfirmDialog';
-import { Box, Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { Alert, Box, Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import CustomButton from '../components/ViewProyect-Page/ViewTask/customButton';
 import { findParticipantsByProject } from '../services/participant.service';
+
+const permitedRoles = [
+    'Product Owner',
+    'Project Manager',
+];
 
 const ViewParticipants = () => {
     const [participants, setParticipants] = useState([]);
@@ -19,11 +24,29 @@ const ViewParticipants = () => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [teamToDelete, setTeamToDelete] = useState(null);
     const [openDeleteParticipant, setOpenDeleteParticipant] = useState(false);
+    const [participantToUpdate, setParticipantToUpdate] = useState(null);
     const [participantToDelete, setParticipantToDelete] = useState(null);
+    const [maxParticipants, setMaxParticipants] = useState(4); // cantidad maxima de participantes
+    const [alertErrorParticipant, setAlertErrorParticipant] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
 
     const handleAddParticipant = (participant) => {
-        setParticipants((prevParticipants) => [...prevParticipants, participant]);
+        if (participants.length < maxParticipants) {
+            setParticipants((prevParticipants) => [...prevParticipants, participant]);
+        } else {
+            setAlertMessage(`No se pueden agregar más de ${maxParticipants} participantes.`);
+            setAlertErrorParticipant(true);
+        }
     };
+
+    const handleUpdateParticipant = (updatedParticipant) => {
+        setParticipants((prevParticipants) => 
+            prevParticipants.map((participant) => 
+                participant.email === updatedParticipant.email ? updatedParticipant : participant
+            )
+        )
+    }
 
     const handleRemoveParticipant = () => {
         setParticipants((prevParticipants) => 
@@ -45,6 +68,9 @@ const ViewParticipants = () => {
 
     const handleDeleteTeam = () => {
         setTeams((prevTeams) => prevTeams.filter((team) => team !== teamToDelete));
+        if(selectedTeam === teamToDelete) {
+            setSelectedTeam(null);
+        }
         setOpenDeleteDialog(false);
         setTeamToDelete(null);
     };
@@ -81,10 +107,20 @@ const ViewParticipants = () => {
     return (
         <div>
             <MenuProject projectName={"Project Name"} />
+            {alertErrorParticipant && (
+                <div style={{ position: 'absolute', zIndex: 9999, top: 22, left: '50%', transform: 'translate(-50%, -42%)', width: '100%' }}>
+                <Alert severity="error" onClose={() => setAlertErrorParticipant(false)}>
+                    {alertMessage}
+                </Alert>
+                </div>
+            )}
             <Grid container spacing={2} style={{ padding: '16px',paddingTop: '32px' }}>
                 <Grid item xs={12} md={6}>
                     <Box padding={2}>
-                        <SearchParticipants onAddParticipant={handleAddParticipant} />
+                        <SearchParticipants 
+                            onAddParticipant={handleAddParticipant} 
+                            permitedRoles={permitedRoles}
+                        />
                         <Typography variant="h6" sx={{ marginTop: '10px',fontFamily: 'Open Sans' }}>
                             Participantes
                         </Typography>
@@ -94,6 +130,10 @@ const ViewParticipants = () => {
                                 setParticipantToDelete(participant);
                                 setOpenDeleteParticipant(true);
                             }} 
+                            onUpdateParticipant={ (updatedParticipant) => {
+                                handleUpdateParticipant(updatedParticipant)
+                            }}
+                            permitedRoles={permitedRoles}
                         />
                         <CustomButton
                             variant="contained"
@@ -151,7 +191,7 @@ const ViewParticipants = () => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseCreateTeam} color="primary">Cancelar</Button>
+                    <Button onClick={handleCloseCreateTeam} color="error">Cancelar</Button>
                 </DialogActions>
             </Dialog>
 

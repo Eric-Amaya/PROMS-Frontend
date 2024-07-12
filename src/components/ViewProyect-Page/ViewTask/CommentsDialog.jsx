@@ -15,6 +15,13 @@ const CommentsDialog = ({ open, onClose, comments, onSaveComment }) => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSaveComment();
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>Comentarios</DialogTitle>
@@ -47,6 +54,7 @@ const CommentsDialog = ({ open, onClose, comments, onSaveComment }) => {
           placeholder="Escribe un comentario..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
+          onKeyPress={handleKeyPress}
           variant="outlined"
         />
         <IconButton onClick={handleSaveComment} sx={{ml: 3, mr: 3}}>

@@ -12,7 +12,10 @@ const TeamDetail = ({ team }) => {
             <List>
                 {team.participants.map((participant, index) => (
                     <ListItem key={index}>
-                        <ListItemText primary={participant.name} secondary={participant.email} />
+                        <Box display='flex' alignItems='center'>
+                            <ListItemText primary={participant.name} secondary={participant.email} />
+                            <Typography ml={6}> {participant.role}</Typography>
+                        </Box>
                     </ListItem>
                 ))}
             </List>

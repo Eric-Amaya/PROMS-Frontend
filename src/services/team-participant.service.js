@@ -14,10 +14,6 @@ export const findTeamParticipant = async (id) => {
                             email
                         }
                         role
-                        tasks {
-                            id
-                            name
-                        }
                         team {
                             id
                             name
@@ -47,10 +43,6 @@ export const findTeamParticipants = async () => {
                             email
                         }
                         role
-                        tasks {
-                            id
-                            name
-                        }
                         team {
                             id
                             name
@@ -66,88 +58,16 @@ export const findTeamParticipants = async () => {
     }
 }
 
-export const findTeamsByParticipant = async (id) => {
-    try {
-        const response = await client.query({
-            query: gql`
-                query FindTeamsByParticipant($id: Float!) {
-                    FIND_TEAMS_BY_PARTICIPANT(id: $id) {
-                        id
-                        description
-                        name
-                        project {
-                            id
-                            name
-                        }
-                        teamParticipant {
-                            id
-                            participant {
-                                id
-                                name
-                                email
-                            }
-                            role
-                            tasks {
-                                id
-                                name
-                            }
-                        }
-                        type
-                    }
-                }
-            `,
-            variables: { id }
-        });
-        return response.data.FIND_TEAMS_BY_PARTICIPANT;
-    } catch (error) {
-        console.error('Error fetching teams by participant:', error);
-        throw error;
-    }
-}
-
-export const findTeamParticipantsByProject = async (projectId) => {
-    try {
-        const response = await client.query({
-            query: gql`
-                query FindTeamParticipantsByProject($projectId: Float!) {
-                    FIND_TEAMS_BY_PROJECT(id: $projectId) {
-                        id
-                        teamParticipant {
-                            id
-                            participant {
-                                id
-                                name
-                                email
-                            }
-                            role
-                            tasks {
-                                id
-                                name
-                            }
-                        }
-                    }
-                }
-            `,
-            variables: { projectId }
-        });
-        return response.data.FIND_TEAMS_BY_PROJECT.map(team => team.teamParticipant);
-    } catch (error) {
-        console.error('Error fetching team participants by project:', error);
-        throw error;
-    }
-}
-
 export const createTeamParticipant = async (teamParticipant) => {
     try {
-        const { id_participant, id_task, id_team, role } = teamParticipant;
+        const { participantId, role, teamId } = teamParticipant;
         const response = await client.mutate({
             mutation: gql`
-                mutation CreateTeamParticipant($id_participant: Float, $id_task: [Float!], $id_team: Float, $role: String!) {
+                mutation CreateTeamParticipant($participantId: Float!, $role: String!, $teamId: Float!) {
                     CREATE_TEAM_PARTICIPANT(createTeamParticipantDto: {
-                        id_participant: $id_participant,
-                        id_task: $id_task,
-                        id_team: $id_team,
-                        role: $role
+                        participantId: $participantId,
+                        role: $role,
+                        teamId: $teamId
                     }) {
                         id
                         participant {
@@ -156,10 +76,6 @@ export const createTeamParticipant = async (teamParticipant) => {
                             email
                         }
                         role
-                        tasks {
-                            id
-                            name
-                        }
                         team {
                             id
                             name
@@ -168,10 +84,9 @@ export const createTeamParticipant = async (teamParticipant) => {
                 }
             `,
             variables: { 
-                id_participant, 
-                id_task, 
-                id_team, 
-                role 
+                participantId, 
+                role, 
+                teamId 
             }
         });
         return response.data.CREATE_TEAM_PARTICIPANT;
@@ -181,12 +96,12 @@ export const createTeamParticipant = async (teamParticipant) => {
     }
 }
 
-export const updateTeamParticipant = async (id, updates) => {
+export const updateTeamParticipant = async (id, teamParticipantUpdates) => {
     try {
         const response = await client.mutate({
             mutation: gql`
-                mutation UpdateTeamParticipant($id: Float!, $updates: UpdateTeamParticipantDto!) {
-                    UPDATE_TEAM_PARTICIPANT(id: $id, updateTeamParticipantDto: $updates) {
+                mutation UpdateTeamParticipant($id: Float!, $teamParticipantUpdates: UpdateTeamParticipantDto!) {
+                    UPDATE_TEAM_PARTICIPANT(id: $id, updateTeamParticipantDto: $teamParticipantUpdates) {
                         id
                         participant {
                             id
@@ -194,10 +109,6 @@ export const updateTeamParticipant = async (id, updates) => {
                             email
                         }
                         role
-                        tasks {
-                            id
-                            name
-                        }
                         team {
                             id
                             name
@@ -205,7 +116,7 @@ export const updateTeamParticipant = async (id, updates) => {
                     }
                 }
             `,
-            variables: { id, updates }
+            variables: { id, teamParticipantUpdates }
         });
         return response.data.UPDATE_TEAM_PARTICIPANT;
     } catch (error) {
@@ -229,6 +140,110 @@ export const deleteTeamParticipant = async (id) => {
         return response.data.DELETE_TEAM_PARTICIPANT;
     } catch (error) {
         console.error('Error deleting team participant:', error);
+        throw error;
+    }
+}
+
+export const findTeamsByParticipant = async (participantId) => {
+    try {
+        const response = await client.query({
+            query: gql`
+                query FindTeamsByParticipant($participantId: Float!) {
+                    FIND_TEAMS_BY_PARTICIPANT(participantId: $participantId) {
+                        id
+                        name
+                        participants {
+                            id
+                            participant {
+                                id
+                                name
+                                email
+                            }
+                            role
+                        }
+                    }
+                }
+            `,
+            variables: { participantId }
+        });
+        return response.data.FIND_TEAMS_BY_PARTICIPANT;
+    } catch (error) {
+        console.error('Error fetching teams by participant:', error);
+        throw error;
+    }
+}
+
+export const findParticipantsByTeam = async (teamId) => {
+    try {
+        const response = await client.query({
+            query: gql`
+                query FindParticipantsByTeam($teamId: Float!) {
+                    FIND_PARTICIPANTS_BY_TEAM(teamId: $teamId) {
+                        id
+                        participant {
+                            id
+                            name
+                            email
+                        }
+                        role
+                    }
+                }
+            `,
+            variables: { teamId }
+        });
+        return response.data.FIND_PARTICIPANTS_BY_TEAM;
+    } catch (error) {
+        console.error('Error fetching participants by team:', error);
+        throw error;
+    }
+}
+
+export const findProjectsByParticipant = async (participantId) => {
+    try {
+        const response = await client.query({
+            query: gql`
+                query FindProjectsByParticipant($participantId: Float!) {
+                    FIND_PROJECTS_BY_PARTICIPANT(participantId: $participantId) {
+                        id
+                        name
+                        description
+                        team {
+                            id
+                            name
+                        }
+                    }
+                }
+            `,
+            variables: { participantId }
+        });
+        return response.data.FIND_PROJECTS_BY_PARTICIPANT;
+    } catch (error) {
+        console.error('Error fetching projects by participant:', error);
+        throw error;
+    }
+}
+
+export const findParticipantsByProject = async (projectId) => {
+    try {
+        const response = await client.query({
+            query: gql`
+                query FindParticipantsByProject($projectId: Float!) {
+                    FIND_PARTICIPANTS_BY_PROJECT(projectId: $projectId) {
+                        id
+                        participant {
+                            id
+                            name
+                            email
+                        }
+                        role
+                    }
+                }
+            `,
+            variables: { projectId }
+        });
+        return response.data.FIND_PARTICIPANTS_BY_PROJECT;
+    } catch (error) {
+        console.error('Error fetching participants by project:', error);
         throw error;
     }
 }

@@ -45,7 +45,7 @@ const CustomToolbar = ({ pageImg, color, userName, userImage }) => {
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={handleMenuClose}>
+            <MenuItem component={Link} to="/view/profile" onClick={handleMenuClose}>
               <IconButton color="inherit">
                 <AccountCircleIcon sx={{ marginRight: 1 }} />
               </IconButton>

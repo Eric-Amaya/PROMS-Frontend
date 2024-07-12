@@ -14,6 +14,7 @@ import ViewResources from './pages/ViewResources';
 import ViewNotifications from './pages/ViewNotifications';
 import ViewSettings from './pages/ViewSettings';
 import ViewPerformance from './pages/ViewPerformance';
+import ViewProfile from './pages/ViewProfile';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -55,6 +56,7 @@ function App() {
             <Route path="/view/performance" element={<ViewPerformance />} />
             <Route path="/view/document" element={<ViewDocument />} />
             <Route path="/view/setting" element={<ViewSettings />} />
+            <Route path="/view/profile" element={<ViewProfile />} />
           </Routes>
         </Box>
       </Box>

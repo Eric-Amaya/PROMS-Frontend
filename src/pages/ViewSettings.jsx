@@ -13,7 +13,7 @@ const projectFormSchema = Yup.object().shape({
 });
 
 const ViewSettings = ({ project, onClose, onSave }) => {
-  const initialProject = {
+  const initialProjectState = {
     name: 'Nombre del Proyecto de Ejemplo',
     amount_participant: 5,
     description: 'Descripción del Proyecto de Ejemplo',
@@ -21,37 +21,20 @@ const ViewSettings = ({ project, onClose, onSave }) => {
     end_date: '2023-12-31',
   };
 
-  const [name, setName] = useState(initialProject.name);
-  const [amountParticipant, setAmountParticipant] = useState(initialProject.amount_participant.toString());
-  const [description, setDescription] = useState(initialProject.description);
-  const [startDate, setStartDate] = useState(initialProject.start_date);
-  const [endDate, setEndDate] = useState(initialProject.end_date);
+  const [projectData, setProjectData] = useState(initialProjectState);
   const [errors, setErrors] = useState({});
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     if (project) {
-      setName(project.name);
-      setAmountParticipant(project.amount_participant.toString());
-      setDescription(project.description);
-      setStartDate(project.start_date);
-      setEndDate(project.end_date);
+      setProjectData(project);
     }
   }, [project]);
 
   const handleSave = async () => {
-    const newProject = {
-      id: project ? project.id : Date.now(),
-      name,
-      amount_participant: parseInt(amountParticipant),
-      description,
-      start_date: startDate,
-      end_date: endDate,
-    };
-
     try {
-      await projectFormSchema.validate(newProject, { abortEarly: false });
-      onSave(newProject); 
+      await projectFormSchema.validate(projectData, { abortEarly: false });
+      onSave(projectData); 
       setErrors({});
       setEditMode(false);
     } catch (error) {
@@ -67,7 +50,6 @@ const ViewSettings = ({ project, onClose, onSave }) => {
     }
   };
 
-
   const clearError = (field) => {
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
@@ -80,9 +62,17 @@ const ViewSettings = ({ project, onClose, onSave }) => {
     setEditMode(true);
   };
 
+  const handleChange = (field, value) => {
+    setProjectData((prevProjectData) => ({
+      ...prevProjectData,
+      [field]: value,
+    }));
+    clearError(field);
+  };
+
   return (
     <div>
-      <MenuProject projectName={name} /> 
+      <MenuProject projectName={projectData.name} /> 
       <Box sx={{ padding: 4 }}>
         <Typography variant="h6">Configuración del proyecto</Typography>
         <Grid container spacing={2} sx={{ mt: 2 }}>
@@ -90,8 +80,8 @@ const ViewSettings = ({ project, onClose, onSave }) => {
             <TextField
               fullWidth
               label="Nombre del Proyecto"
-              value={editMode ? name : initialProject.name}
-              onChange={(e) => setName(e.target.value)}
+              value={editMode ? projectData.name : initialProjectState.name}
+              onChange={(e) => handleChange('name', e.target.value)}
               onFocus={() => clearError('name')}
               error={!!errors.name}
               helperText={errors.name}
@@ -103,8 +93,8 @@ const ViewSettings = ({ project, onClose, onSave }) => {
               fullWidth
               type="number"
               label="Cantidad de participantes"
-              value={editMode ? amountParticipant : initialProject.amount_participant.toString()}
-              onChange={(e) => setAmountParticipant(e.target.value)}
+              value={editMode ? projectData.amount_participant : initialProjectState.amount_participant.toString()}
+              onChange={(e) => handleChange('amount_participant', e.target.value)}
               onFocus={() => clearError('amount_participant')}
               error={!!errors.amount_participant}
               helperText={errors.amount_participant}
@@ -115,8 +105,8 @@ const ViewSettings = ({ project, onClose, onSave }) => {
             <TextField
               fullWidth
               label="Descripción"
-              value={editMode ? description : initialProject.description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={editMode ? projectData.description : initialProjectState.description}
+              onChange={(e) => handleChange('description', e.target.value)}
               onFocus={() => clearError('description')}
               error={!!errors.description}
               helperText={errors.description}
@@ -129,8 +119,8 @@ const ViewSettings = ({ project, onClose, onSave }) => {
               fullWidth
               type="date"
               label="Fecha de inicio"
-              value={editMode ? startDate : initialProject.start_date}
-              onChange={(e) => setStartDate(e.target.value)}
+              value={editMode ? projectData.start_date : initialProjectState.start_date}
+              onChange={(e) => handleChange('start_date', e.target.value)}
               InputLabelProps={{ shrink: true }}
               disabled={!editMode}
             />
@@ -140,8 +130,8 @@ const ViewSettings = ({ project, onClose, onSave }) => {
               fullWidth
               type="date"
               label="Fecha de finalización"
-              value={editMode ? endDate : initialProject.end_date}
-              onChange={(e) => setEndDate(e.target.value)}
+              value={editMode ? projectData.end_date : initialProjectState.end_date}
+              onChange={(e) => handleChange('end_date', e.target.value)}
               InputLabelProps={{ shrink: true }}
               disabled={!editMode}
             />

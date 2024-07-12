@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import { Drawer, Box, TextField, Typography, Grid, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import * as Yup from 'yup';
-
-const projectFormSchema = Yup.object().shape({
-  name: Yup.string().required('El nombre es requerido'),
-  amount_participant: Yup.number().required('La cantidad de participantes es requerida'),
-  description: Yup.string().required('La descripción es requerida'),
-  start_date: Yup.date().required('La fecha de inicio es requerida'),
-  end_date: Yup.date().required('La fecha de finalización es requerida'),
-});
+import CustomButton from '../../ViewProyect-Page/ViewTask/customButton';
+import { projectFormSchema } from '../../../validation/createProject-schema';
 
 const ProjectsForm = ({ project, onClose, onSave }) => {
   const [name, setName] = useState(project ? project.name : '');
@@ -18,6 +12,8 @@ const ProjectsForm = ({ project, onClose, onSave }) => {
   const [startDate, setStartDate] = useState(project ? project.start_date : '');
   const [endDate, setEndDate] = useState(project ? project.end_date : '');
   const [errors, setErrors] = useState({});
+
+  const validationSchema = projectFormSchema;
 
   const handleSave = async () => {
     const newProject = {
@@ -29,7 +25,7 @@ const ProjectsForm = ({ project, onClose, onSave }) => {
       end_date: endDate,
     };
     try {
-      await projectFormSchema.validate(newProject, { abortEarly: false });
+      await validationSchema.validate(newProject, { abortEarly: false });
       onSave(newProject);
       setErrors({});
     } catch (error) {
@@ -126,9 +122,9 @@ const ProjectsForm = ({ project, onClose, onSave }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button fullWidth variant="contained" color="primary" onClick={handleSave}>
+            <CustomButton fullWidth variant="contained" color="primary" onClick={handleSave}>
               Guardar
-            </Button>
+            </CustomButton>
           </Grid>
         </Grid>
       </Box>

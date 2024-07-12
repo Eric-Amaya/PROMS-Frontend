@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import ViewProjects from '../components/ViewHome-Page/ViewProjects/ViewProjects';
 import ProjectsForm from '../components/ViewHome-Page/ProjectsForm/ProjectsForm';
 import CustomButton from '../components/ViewHome-Page/CustomButton';
@@ -45,9 +45,9 @@ const Home = () => {
   // }, [projects]);
 
   return (
-    <div>
+    <Container xl maxWidth='xl' sx={{pt: 2}}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" gutterBottom marginTop={1} marginLeft={2}>
+        <Typography variant="h5" gutterBottom marginTop={1} marginLeft={2}>
           Bienvenido a PROMS
         </Typography>
         <CustomButton variant="contained" color="primary" onClick={() => handleOpenForm()}>
@@ -62,7 +62,7 @@ const Home = () => {
           onSave={handleSaveProject} 
         />
       )}
-    </div>
+    </Container>
   );
 };
 

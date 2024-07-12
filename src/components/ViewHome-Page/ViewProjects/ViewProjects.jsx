@@ -24,7 +24,7 @@ const ViewProjects = ({ projects, onSelectProject }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h6" gutterBottom>
         Vista general de tus proyectos
       </Typography>
       
@@ -47,13 +47,13 @@ const ViewProjects = ({ projects, onSelectProject }) => {
               }}
             >
               <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6">
+                <Typography variant="subtitle1">
                   {course.name}
                 </Typography>
-                <Typography color="textSecondary">
+                <Typography variant='body1' color="textSecondary">
                   Fecha de inicio: {course.start_date}
                 </Typography>
-                <Typography color="textSecondary">
+                <Typography variant='body1' color="textSecondary">
                   Fecha de término: {course.end_date}
                 </Typography>
               </CardContent>

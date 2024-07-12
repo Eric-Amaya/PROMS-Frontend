@@ -9,6 +9,7 @@ import ConfirmDialog from '../components/ViewProyect-Page/ViewParticipants/Confi
 import { Alert, Box, Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import CustomButton from '../components/ViewProyect-Page/ViewTask/customButton';
 import { findParticipantsByProject } from '../services/participant.service';
+import ViewChat from './ViewChat';
 
 const permitedRoles = [
     'Product Owner',
@@ -202,6 +203,7 @@ const ViewParticipants = () => {
                 title="Confirmar eliminación"
                 description={`¿Estás seguro de que deseas eliminar el equipo ${teamToDelete ? teamToDelete.name : ''}?`}
             />
+            <ViewChat/>
         </div>
     );
 };

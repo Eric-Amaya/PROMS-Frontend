@@ -4,6 +4,7 @@ import { Download as DownloadIcon, Delete as DeleteIcon } from '@mui/icons-mater
 import MenuProject from '../components/ViewProyect-Page/MenuProject';
 import CustomButton from '../components/ViewProyect-Page/ViewDocument/customButton';
 import UploadIcon from '@mui/icons-material/Upload';
+import ViewChat from './ViewChat';
 
 const ViewDocument = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -126,6 +127,7 @@ const ViewDocument = () => {
                 <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-start' }}>
                     <CustomButton variant="contained" icon = {<UploadIcon />} >Subir Documento</CustomButton>
                 </Box>
+                <ViewChat/>
             </Box>
         </div>
     );

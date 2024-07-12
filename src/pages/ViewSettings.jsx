@@ -3,6 +3,7 @@ import { Box, TextField, Typography, Grid } from '@mui/material';
 import * as Yup from 'yup';
 import CustomButton from '../components/ViewHome-Page/CustomButton';
 import MenuProject from '../components/ViewProyect-Page/MenuProject';
+import ViewChat from './ViewChat';
 
 const projectFormSchema = Yup.object().shape({
   name: Yup.string().required('El nombre es requerido'),
@@ -149,6 +150,7 @@ const ViewSettings = ({ project, onClose, onSave }) => {
           </Grid>
         </Grid>
       </Box>
+      <ViewChat/>
     </div>
   );
 };

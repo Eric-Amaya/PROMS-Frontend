@@ -4,6 +4,7 @@ import StatisticsCard from '../components/ViewProyect-Page/ViewPerformance/Stati
 import TaskProgressChart from '../components/ViewProyect-Page/ViewPerformance/TaskProgressChart';
 import TaskList from '../components/ViewProyect-Page/ViewPerformance/TaskList';
 import MenuProject from '../components/ViewProyect-Page/MenuProject';
+import ViewChat from './ViewChat';
 
 
 const ViewPerformance = () => {
@@ -110,6 +111,7 @@ const ViewPerformance = () => {
                     </Grid>
                 </Grid>
             </Container>
+            <ViewChat/>
         </div>
     );
 };

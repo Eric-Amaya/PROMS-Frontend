@@ -14,6 +14,7 @@ import { findResourcesByProject } from '../services/resource.service';
 import { createResource } from '../services/resource.service';
 import { updateResource } from '../services/resource.service';
 import { deleteResource } from '../services/resource.service';
+import ViewChat from './ViewChat';
 
 const ViewResources = () => {
     const [resources, setResources] = useState([]);
@@ -261,6 +262,7 @@ const ViewResources = () => {
                     </DialogActions>
                 </Dialog>
             </Box>
+            <ViewChat/>
         </div>
     )
 }

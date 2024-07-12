@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Chart } from 'react-google-charts';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import CustomButton from './CustomButton';
-import { findTaskByProject } from '../../services/task.service';
+import { findTaskByProject } from '../../../services/task.service';
 
 const GanttChart = () => {
   const [data, setData] = useState([
@@ -29,6 +29,7 @@ const GanttChart = () => {
   ]);
 
   const chartRef = useRef(null);
+  const [titleProject, setTitleProject] = useState('Nombre del Proyecto'); // Asegúrate de establecer el nombre del proyecto
 
   const options = {
     height: 400,
@@ -55,10 +56,29 @@ const GanttChart = () => {
       const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('gantt_chart.pdf');
+  
+      // Añadir título del proyecto centrado
+      pdf.setFontSize(18);
+      pdf.setTextColor(0, 0, 0);
+      pdf.text(titleProject, pdfWidth / 2.2, 20, { align: 'center' });
+  
+      // Añadir subtítulo "Cronograma" a la izquierda
+      pdf.setFontSize(14);
+      pdf.setTextColor(0, 0, 0);
+      pdf.text('Cronograma', 15, 30);
+
+      pdf.setFontSize(12);
+      pdf.setTextColor(0, 0, 0);
+      const dateText = `Fecha: ${new Date().toLocaleDateString()}`;
+      pdf.text(dateText, 15, pdfHeight + 50);
+  
+      // Añadir imagen del cronograma
+      pdf.addImage(imgData, 'PNG', 10, 40, pdfWidth - 20, pdfHeight);
+  
+      pdf.save(`${titleProject.replace(/\s+/g, '_')}_gantt_chart.pdf`);
     });
   };
+  
 
   // useEffect(() => {
   //   const loadData = async () => {

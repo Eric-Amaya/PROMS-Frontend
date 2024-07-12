@@ -13,6 +13,7 @@ import ViewDocument from './pages/ViewDocument';
 import ViewResources from './pages/ViewResources';
 import ViewNotifications from './pages/ViewNotifications';
 import ViewSettings from './pages/ViewSettings';
+import ViewPerformance from './pages/ViewPerformance';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -51,7 +52,7 @@ function App() {
             <Route path="/view/schedule" element={<ViewSchedule />} />
             <Route path="/view/resource" element={<ViewResources />} />
             <Route path="/view/participants" element={<ViewParticipants />} />
-            <Route path="/view/performance" element={<ViewTask />} />
+            <Route path="/view/performance" element={<ViewPerformance />} />
             <Route path="/view/document" element={<ViewDocument />} />
             <Route path="/view/setting" element={<ViewSettings />} />
           </Routes>

@@ -13,7 +13,13 @@ const ChatButton = ({ newMessagesCount, onClick }) => {
       }}
     >
       <Badge badgeContent={newMessagesCount} color="error">
-        <Fab color="primary" aria-label="chat" onClick={onClick}>
+        <Fab sx={{
+          color: '#FFFFFF',
+          backgroundColor: '#0b3b62',
+          '&:hover': {
+            color: '#0b3b62',
+          },
+        }} aria-label="chat" onClick={onClick}>
           <ChatIcon />
         </Fab>
       </Badge>

@@ -10,6 +10,7 @@ import CustomButton from '../components/ViewProyect-Page/ViewTask/customButton';
 import MenuProject from '../components/ViewProyect-Page/MenuProject';
 import traslations from '../traduction/es.json';
 import { findTaskByProject } from '../services/task.service';
+import ViewChat from './ViewChat';
 
 const initialTasks = {
   pending: [],
@@ -282,6 +283,7 @@ const ViewTask = () => {
           taskMovements={taskMovements.filter(movement => movement.taskId === (selectedTaskToInfo ? selectedTaskToInfo.id : null))}
         />
       </div>
+      <ViewChat/>
     </DragDropContext>
   );
 };
